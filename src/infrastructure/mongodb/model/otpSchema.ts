@@ -7,6 +7,7 @@ import { IOtp } from "../../../entities/otp";
 const otpSchema = new Schema<IOtp>({
     author:{
         email:{type:String,required:true},
+        name:{type:String},
         password:{type:String,required:true},
     },
     otp:{

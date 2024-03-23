@@ -1,7 +1,7 @@
 
 import { IOtp } from "../../../entities/otp"
-import { dbModel } from "../../types/mongo"
-
+import { dbModel } from "../../@types/mongo"
+import { singUpBody } from "../../@types/reqBodey"
 import { Iotprepository } from "../../../usecases/interfaces/repositroey/IOtRepository"
 export class OtpRepository implements Iotprepository {
 
@@ -11,13 +11,13 @@ export class OtpRepository implements Iotprepository {
         this.otpModel = otpModel
     }
 
-    async createNewOtp(otp_n: number, author: { email: string, password: string }): Promise<IOtp> {
+    async createNewOtp(otp_n: number, author: { email: string, password?: string }): Promise<IOtp> {
         console.log(author);
         
         const Otp: IOtp = {
             author: {
                 email: author.email,
-                password: author.password
+                password: author.password!
             },
             otp: otp_n,
         }
@@ -32,6 +32,22 @@ export class OtpRepository implements Iotprepository {
         const Otp = await this.otpModel.findOneAndDelete({ otp })
         console.log(Otp)
         return Otp ? Otp : false
+    }
+    async verifyOtp(email:string,otp:string):Promise<singUpBody|false>{
+
+        console.log("sssss",email);
+        const dbOtp =await this.otpModel.findOne({ "author.email": email }) as unknown as IOtp
+        console.log(dbOtp);
+        
+        if(dbOtp?.otp==parseInt(otp))
+            return dbOtp.author
+        return false
+        
+        
+
+
+
+
     }
 
 

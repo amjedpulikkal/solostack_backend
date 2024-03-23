@@ -1,42 +1,21 @@
 require("dotenv").config();
 import nodemailer from "nodemailer"
-import Mail from "nodemailer/lib/mailer";
-
+import { InodeMailer } from "../../usecases/interfaces/services/interface";
 const transport = nodemailer.createTransport({
     service: "gmail",
     auth: {
         user: process.env.nodemailerEmail,
         pass: process.env.nodemailerPassword
     }
+});
 
-})
+import { MailPayload } from "../@types/type";
 
-
-
-export class Nodemailer {
-    async sendOtpToMail(payload: {
-        from: string
-        to: string
-        subject: string
-        text: string
-        html: string
-    }): Promise<boolean>{
-
-        try {
-            const send = await transport.sendMail(payload)
+export class Nodemailer implements InodeMailer {
+    async sendOtpToMail(payload: MailPayload): Promise<boolean|Error>{
+            const send = await transport.sendMail(payload);
             console.log(send);
-            
-            return true
-        } catch (error) {
-
-            console.log(error);
-
-            return false
-        }
-
-
-
-
+            return true;
+       
     }
-
 }

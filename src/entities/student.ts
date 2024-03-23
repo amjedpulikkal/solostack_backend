@@ -1,4 +1,5 @@
 interface Istudent {
+   
     _id?: string;
     email:string
     password: string;

@@ -1,20 +1,20 @@
-import Istudet from "../../../entities/studet"
+import Istudet from "../../../entities/student"
 
 import mongoose ,{ Schema ,Model     } from "mongoose"; 
 const studentSchema = new Schema<Istudet>({
-    email: {type: String},
-    password: {type: String},
+    email: {type: String,unique:true},
+    password: {type: String,default:""},
     personal_info: {
-        userName:{type: String},
-        name: {type: String },
-        bio: {type: String },
-        photo: {type: String ,default:""},
+        userName:{type: String,default:""},
+        name: {type: String ,default:""},
+        bio: {type: String ,default:""},
+        photo: {type: String ,default:"https://lionrocker.com.au/wp-content/uploads/2022/04/placeholder-img.jpg"},
     },
     social_links:{
-        linkedin:{type: String},
+        linkedin:{type: String,default:""},
     },
     account_info:{
-        learningGoals: {type: String},
+        learningGoals: {type: String,default:""},
         completedSessions:[Schema.Types.ObjectId],
         reviews: [Schema.Types.ObjectId],
         skillLevel: {type:String,enum:["Newcomer" , "Developing" , "Proficient" , "Master"]},

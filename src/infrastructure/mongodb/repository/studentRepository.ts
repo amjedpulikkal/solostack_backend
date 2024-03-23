@@ -1,36 +1,69 @@
 
-import Istudent from "../../../entities/studet";
+import Istudent from "../../../entities/student";
 
 import studentCollection from "../../mongodb/model/studentSchema"
 
 import { IstudentRepository } from "../../../usecases/interfaces/repositroey/IstudentRepository";
-import { singUpBodey } from "../../types/reqBodey";
-export class StudentRepository implements IstudentRepository  {
+// import { singUpBody } from "../../types/reqBodey";
+export class StudentRepository implements IstudentRepository {
 
-    
+
     async ifUserExist(email: string): Promise<boolean> {
-        const isExist = await studentCollection.findOne({ "personal_info.email": email })
-        
+        const isExist = await studentCollection.findOne({ email })
+
         return isExist ? true : false
     }
-    async newStudent(Singstudent: singUpBodey): Promise<Istudent> {
+    async newStudent(student: { email: string, name: string, password?: string, photos?: string }): Promise<Istudent> {
 
-        const student:Istudent ={
-            email: Singstudent.email,
-            password: Singstudent.password,
+        const Student: Istudent = {
+            email: student.email,
+            password: student.password || "",
             personal_info: {
                 userName: "",
-                name: "",
+                name: student.name,
                 age: 0,
                 bio: "",
-                photo: ""
+                photo: student.photos || ""
             },
             wallet: 0,
             isBlocked: false
         }
 
-        const newStudent = await studentCollection.create(student)
+        const newStudent = await studentCollection.create(Student)
         return newStudent
+    }
+    async upsertStudent(student: { email: string, name: string, password?: string, photos?: string }): Promise<Istudent> {
+
+        const Student = {
+            email: student.email,
+            password: student.password || "",
+            personal_info: {
+                userName: "",
+                name: student.name,
+                age: 0,
+                bio: "",
+                photo: student.photos || ""
+            },
+            wallet: 0,
+            isBlocked: false
+        }
+        const newStudent = await studentCollection.findOneAndUpdate(
+            { email: student.email },
+            { $set: Student }, 
+            { upsert: true, new: true }
+        );
+        return newStudent
+    }
+
+    async findUserWithEmail(email: string): Promise<Istudent> {
+
+        const student = await studentCollection.findOne({ email })
+
+        return student!
+    }
+
+    async findById(_id:string):Promise<Istudent> {
+        return await studentCollection.findById(_id) as Istudent
     }
 
 }
