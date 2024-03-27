@@ -13,7 +13,7 @@ export class OtpRepository implements Iotprepository {
 
     async createNewOtp(otp_n: number, author: { email: string, password?: string }): Promise<IOtp> {
         console.log(author);
-        
+
         const Otp: IOtp = {
             author: {
                 email: author.email,
@@ -33,17 +33,17 @@ export class OtpRepository implements Iotprepository {
         console.log(Otp)
         return Otp ? Otp : false
     }
-    async verifyOtp(email:string,otp:string):Promise<singUpBody|false>{
+    async verifyOtp(email: string, otp: string): Promise<singUpBody | false> {
 
-        console.log("sssss",email);
-        const dbOtp =await this.otpModel.findOne({ "author.email": email }) as unknown as IOtp
+        console.log("sssss", email);
+        const dbOtp = await this.otpModel.findOne({ "author.email": email }) as unknown as IOtp
         console.log(dbOtp);
-        
-        if(dbOtp?.otp==parseInt(otp))
+        console.log(dbOtp.otp,dbOtp.otp===parseInt(otp),otp)
+        if (dbOtp?.otp === parseInt(otp))
             return dbOtp.author
         return false
-        
-        
+
+
 
 
 
