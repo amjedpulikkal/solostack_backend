@@ -26,7 +26,7 @@ async function PassportResponse(accessToken: string, refreshToken: string, profi
         if (profile.provider === "google") {
 
         }
-        const isExist = await db.findUserWithEmail(profile.emails?.[0]?.value!);
+        const isExist = await db.findWithEmail(profile.emails?.[0]?.value!);
         console.log(isExist);
         console.log(`---------------${profile.provider}--------------------`);
         console.log(profile);

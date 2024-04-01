@@ -55,7 +55,7 @@ export class StudentRepository implements IstudentRepository {
         return newStudent
     }
 
-    async findUserWithEmail(email: string): Promise<Istudent> {
+    async findWithEmail(email: string): Promise<Istudent> {
 
         const student = await studentCollection.findOne({ email })
 
@@ -64,6 +64,10 @@ export class StudentRepository implements IstudentRepository {
 
     async findById(_id:string):Promise<Istudent> {
         return await studentCollection.findById(_id) as Istudent
+    }
+    async updatePassword(_id:string,password:string){
+        return await studentCollection.findByIdAndUpdate(_id,{$set:{password}})
+
     }
 
 }

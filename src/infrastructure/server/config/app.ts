@@ -5,7 +5,8 @@ import cors from "cors"
 import helmet from "helmet";
 import morgan from "morgan"
 import cookieParser from "cookie-parser"
-import StudentRouter from "../router/studentRouter"
+import studentRouter from "../router/studentRouter"
+import mentorRouter from "../router/mentorRouter"
 import session from 'express-session'
 import passport from 'passport'
 const app: Express = express()
@@ -22,5 +23,6 @@ app.use(cookieParser())
 app.use(express.json())
 app.use(express.urlencoded({ extended: true }))
 app.use(morgan('dev'))
-app.use('/api/v1/student', StudentRouter)
+app.use('/api/v1/student', studentRouter)
+app.use('/api/v1/mentor', mentorRouter)
 export default app

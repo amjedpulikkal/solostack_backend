@@ -1,80 +1,86 @@
-
-// import { Imentor } from "@entities/mentor";
-
-// import mentorCollection from "../../mongodb/model/mentorSchema"
-
-// import { ImentorRepository } from "../../../usecases/interfaces/repositroey/ImentorRepository";
-
-// export class mentorRepository implements ImentorRepository {
+import mentorCollection from "../../mongodb/model/mentorSchema"
+import { Imentor } from "@entities/mentor"
+import { ImentorRepository } from "@interfaces/repositroey/ImentorRepository"
 
 
-//     async ifUserExist(email: string): Promise<boolean> {
-//         const isExist = await mentorCollection.findOne({ email })
+export class MentorRepository implements ImentorRepository {
 
-//         return isExist ? true : false
-//     }
 
-//     async newmentor(mentor: { email: string, name: string, password?: string, photos?: string }): Promise<Imentor> {
+    async ifUserExist(email: string): Promise<boolean> {
+        const isExist = await mentorCollection.findOne({ email })
+        console.log(isExist)
+        return isExist ? true : false
+    }
+    async newMentor(mentor: { email: string, name: string, password?: string, photos?: string }): Promise<Imentor> {
 
-//         const Mentor: Imentor = {
-//             email: mentor.email,
-//             password: mentor.password || "",
-//             personal_info: {
-//                 userName: "",
-//                 name: mentor.name,
-//                 bio: "",
-//                 photo: mentor.photos || ""
-//             },
-//             wallet: 0,
-//             isBlocked: false,
-//             social_links: {
-//                 linkedin: ""
-//             },
-//             account_info: {
-//                 PreferredMeetingDuration: 0,
-//                 Ratings: [],
-//                 YearsOfExperience: 0,
-//                 Availability: [],
-//                 Review: []
-//             },
-//             joinedAt: undefined
-//         }
+        const Mentor: Imentor = {
+            email: mentor.email,
+            password: mentor.password || "",
+            personal_info: {
+                userName: "",
+                name: mentor.name,
+                bio: "",
+                photo: mentor.photos || ""
+            },
+            wallet: 0,
+            isBlocked: false,
+            social_links: {
+                linkedin: ""
+            },
+            account_info: {
+                PreferredMeetingDuration: 0,
+                Ratings: [],
+                YearsOfExperience: 0,
+                Review: []
+            },
+            joinedAt: undefined
+        }
 
-//         const newMentor = await mentorCollection.create(Mentor)
-//         return newMentor
-//     }
-//     async upsertmentor(mentor: { email: string, name: string, password?: string, photos?: string }): Promise<Imentor> {
+        const newMentor = await mentorCollection.create(Mentor)
+        return newMentor
+    }
 
-//         const mentor = {
-//             email: mentor.email,
-//             password: mentor.password || "",
-//             personal_info: {
-//                 userName: "",
-//                 name: mentor.name,
-//                 age: 0,
-//                 bio: "",
-//                 photo: mentor.photos || ""
-//             },
-//             wallet: 0,
-//             isBlocked: false
-//         }
-//         const newmentor = await mentorCollection.findOneAndUpdate(
-//             { email: mentor.email },
-//             { $set: mentor }, 
-//             { upsert: true, new: true }
-//         );
-//         return newmentor
-//     }
+    async findWithEmail(email: string): Promise<Imentor> {
 
-//     async findUserWithEmail(email: string): Promise<Imentor> {
+        const mentor = await mentorCollection.findOne({ email })
+        console.log(mentor)
+        return mentor!
+    }
+    async pushNewDate(email: string, { date, time }: { date: Date, time: number[] }): Promise<Imentor> {
+        const newAvailability = {
+            date,
+            time
+        };
+        const isExist = await mentorCollection.findOne({ email, 'account_info.Availability.date': date });
+        if (isExist) {
+           const data = mentorCollection.findOneAndUpdate(
+                { email, "account_info.Availability.date": date },
+                { $set: { "account_info.Availability.$.time": time } },
+                { new: true }
+            );
+            return data 
+        } else {
+            const data = await mentorCollection.findOneAndUpdate({ email }, { $push: { 'account_info.Availability': newAvailability } },)
+            return data
+        }
+    }
 
-//         const mentor = await mentorCollection.findOne({ email })
+    async gatAvailableTimeWithDate(_id: string, date: Date): Promise<{ date: Date, time: Number[] }> {
 
-//         return mentor!
-//     }
+        const available = await mentorCollection.findById(_id)
+        console.log(available, "------------------")
 
-//     async findById(_id:string):Promise<Imentor> {
-//         return await mentorCollection.findById(_id) as Imentor
-//     }
+        const filteredData = available.account_info.Availability.filter(item => {
+            console.log(item.date.getTime() === new Date(date).getTime());
 
-// }
+            if (item.date.getTime() === new Date(date).getTime()) {
+
+                return item
+
+            }
+        })
+        console.log("++++++++  ", available.account_info.Availability)
+        console.log("++++++++  ", filteredData)
+        return filteredData[0]
+    }
+} 

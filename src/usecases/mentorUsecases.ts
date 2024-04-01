@@ -1,36 +1,24 @@
-import { IstudentRepository } from "./interfaces/repositroey/IstudentRepository"
 
-import Istudent from "@entities/student";
 import { singUpBody } from "@infrastructure/@types/reqBodey";
-import { IstudenUsecases } from "@interfaces/IstudentUsecases";
 import { Iotprepository } from "@interfaces/repositroey/IOtRepository";
 import { Iuuid } from "@interfaces/services/interface";
 import { InodeMailer } from "@interfaces/services/interface";
 import { IHashpassword } from "@interfaces/services/interface";
 import { Itoken } from "@interfaces/services/interface";
-// import { OtpTemplate } from "./ infrastructure/services/maileTamplate";
-import { OtpTemplate } from "../infrastructure/services/maileTamplate";
+import { ImentorRepository } from "@interfaces/repositroey/ImentorRepository"
+import { ImentorUseCases } from "@interfaces/ImentorUseCases";
+import { OtpTemplate, forgetPasswordTemplate } from "../infrastructure/services/maileTamplate";
 import { JwtPayload, ResponseObj } from "@infrastructure/@types/type";
-
-
-// class statusCode {
-
-//     constructor(data,stat){
-
-//     }
-
-// }
-
-
-export class StudentUsecase implements IstudenUsecases {
+import { Imentor } from "@entities/mentor";
+export class MentorUseCases implements ImentorUseCases {
     private mailServes: InodeMailer;
-    private studentRepo: IstudentRepository;
+    private mentorRepo: ImentorRepository;
     private otpRepository: Iotprepository;
     private uuid: Iuuid;
     private hashPassword: IHashpassword;
     private token: Itoken;
     constructor(
-        studentRepo: IstudentRepository,
+        mentorRepo: ImentorRepository,
         otpRepository: Iotprepository,
         uuid: Iuuid,
         nodeMailer: InodeMailer,
@@ -38,82 +26,62 @@ export class StudentUsecase implements IstudenUsecases {
         token: Itoken
     ) {
         this.otpRepository = otpRepository
-        this.studentRepo = studentRepo
+        this.mentorRepo = mentorRepo
         this.uuid = uuid
         this.mailServes = nodeMailer
         this.hashPassword = hashPassword
         this.token = token
     }
 
+    async createMentorAccount(mentor: singUpBody): Promise<ResponseObj> {
 
-    async createStudentAccount(student: singUpBody): Promise<number> {
-
-        const isExist = await this.studentRepo.ifUserExist(student.email)
+        const isExist = await this.mentorRepo.ifUserExist(mentor.email)
         console.log(isExist);
 
         if (isExist) {
-            return 409
+            return {
+                status: 409,
+                data: "email is exist"
+            }
         }
 
         const otp = this.uuid.generateOTPFromUUID()
         console.log(otp)
-        const template = OtpTemplate(student.email, otp, student.name)
+        const template = OtpTemplate(mentor.email, otp, mentor.name)
+
         await this.mailServes.sendOtpToMail(template)
 
-        await this.otpRepository.createNewOtp(otp, student)
+        await this.otpRepository.createNewOtp(otp, mentor)
 
-
-        return 200
+        return {
+            status: 200,
+            data: "otp sent"
+        }
 
     }
-    async verifyStudentAccount(email: string, otp: string): Promise<string | number> {
+    async verifyMentorAccount(email: string, otp: string): Promise<ResponseObj> {
         if (!email) {
-            return ""
+            return { status: 403, data: "email is " }
         }
 
         const otpValid = await this.otpRepository.verifyOtp(email, otp) as singUpBody
-        console.log("Otp-->",otpValid);
+        console.log("Otp-->", otpValid);
         if (!otpValid)
-            return 403
+            return { status: 403, data: "otp not valid" }
 
         otpValid.password = await this.hashPassword.createHash(otpValid.password!)
-        const student = await this.studentRepo.newStudent(otpValid)
-        console.log("ddd", student);
-        console.log(typeof student);
+        const mentor = await this.mentorRepo.newMentor(otpValid)
+        console.log("ddd", mentor);
+        console.log(typeof mentor);
 
-        const token = this.token.singToken(student)
+        const token = this.token.singToken(mentor)
 
-        return token
-
-    }
-
-    async oauthSuccuss(user: Istudent): Promise<string> {
-
-        const payload = {
-            email: user.email
-            , _id: user._id!
-        }
-        const token = this.token.singToken(payload)
-        return token
-    }
-    async isOauth(token: string): Promise<Istudent|boolean>{
-
-        const data = this.token.verifyJwtToken(token) as JwtPayload
-        console.log(data);
-
-        if (data) {
-
-            const studentData = await this.studentRepo.findById(data._id)
-            studentData.password = ""
-            return studentData
-        }
-        return false
+        return { status: 201, token, data: mentor }
 
     }
-
     async login(email: string, password: string): Promise<ResponseObj> {
         try {
-            const user = await this.studentRepo.findUserWithEmail(email);
+            const user = await this.mentorRepo.findWithEmail(email);
 
             if (!user) {
                 return {
@@ -140,7 +108,7 @@ export class StudentUsecase implements IstudenUsecases {
 
             };
         } catch (error) {
-            // Handle errors (e.g., database errors, hashing errors, etc.)
+
             console.error("Error occurred during login:", error);
             return {
                 status: 500,
@@ -149,7 +117,25 @@ export class StudentUsecase implements IstudenUsecases {
         }
     }
 
+    async updateAvailableTime(email: string, date: { date: Date, time: number[] }): Promise<ResponseObj> {
+
+        const data = await this.mentorRepo.pushNewDate(email, date)
+
+        return { data, status: 200 }
+    }
+
+    async getAvailableTime(mentor: Imentor, date: Date): Promise<ResponseObj> {
+
+        console.log(date)
+
+        const data = await this.mentorRepo.gatAvailableTimeWithDate(mentor._id, date)
+
+        console.log("data",data)
+       
+        return { data, status: 200 }
+
+    }
+ account_info
 
 
 }
-

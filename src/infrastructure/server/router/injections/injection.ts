@@ -7,6 +7,9 @@ import { Uuid } from "../../../services/uuid"
 import { Nodemailer } from "../../../services/nodemailer"
 import { Encrypt } from "../../../services/hashPassword"
 import { Token } from "../../../services/token"
+import Mentor  from "../../../../controllers/mentorConteoller"
+import { MentorUseCases } from "../../../../usecases/mentorUsecases"
+import { MentorRepository } from "../../../../infrastructure/mongodb/repository/mentorRepository"
 
 const studentRepo = new StudentRepository()
 const uuid = new Uuid()
@@ -15,7 +18,7 @@ const nodemailer = new Nodemailer()
 const hashPassword = new Encrypt()
 
 const token = new Token()
-// const passport = 
+
 const studentUsecase = new StudentUsecase(
     studentRepo,
     otpRepository,
@@ -23,9 +26,19 @@ const studentUsecase = new StudentUsecase(
     nodemailer,
     hashPassword,
     token
+    )
+    
+const mentorRepository = new MentorRepository()
+
+const mentorUseCases = new MentorUseCases(
+    mentorRepository,
+    otpRepository,
+    uuid,
+    nodemailer,
+    hashPassword,
+    token
+
 )
 
-console.log("fddfd");
-
-
+export const mentorCtrl = new Mentor(mentorUseCases)
 export const studentCtrl = new studentController(studentUsecase)

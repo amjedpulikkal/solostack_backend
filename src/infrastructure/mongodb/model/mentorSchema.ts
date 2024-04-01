@@ -19,7 +19,10 @@ const mentorSchema = new Schema<Imentor>({
         PreferredMeetingDuration: { type: Number, default: "" },
         Ratings:{type:[]},
         YearsOfExperience:{type:Number},
-        Availability:{type:[Date]},
+        Availability:[{
+            date:Date,
+            time:[Number]
+        }],
         Review:{type:[]},
     },
     wallet: { type: Number, default: 0 },
@@ -30,6 +33,8 @@ const mentorSchema = new Schema<Imentor>({
 
 type mentor = InferSchemaType<typeof mentorSchema>;
 
+
+export const ObjectId = mongoose.Types.ObjectId
 const mentorModel: Model<Imentor> = mongoose.model<Imentor>('mentor', mentorSchema)
 
 export default mentorModel

@@ -171,21 +171,21 @@ export class studentController {
 
         try {
             const { email, password } = req.body
-            console.log(email,password);
-            
+            console.log(email, password);
+
             const data = await this.studentUsecase.login(email, password)
-            console.log("dataRes",data);
-            
-            if (data.status === 200) 
-            return res.cookie('jwtToken', data?.token , {
+            console.log("dataRes", data);
+
+            if (data.status === 200)
+                return res.cookie('jwtToken', data?.token, {
                     httpOnly: true,
                     secure: true,
                     sameSite: 'strict',
                     maxAge: 3600000,
                     path: '/',
                 }).status(data.status).json(data.data);
-            
-           return res.status(data.status).json(data.data)
+
+            return res.status(data.status).json(data.data)
 
         } catch (error) {
             console.log(error);
@@ -195,5 +195,56 @@ export class studentController {
 
     }
 
+    async forgetPassword(req: req, res: res, next: next) {
+        try {
+
+            const { email } = req.body
+
+            console.log(email);
+
+            const data = await this.studentUsecase.forgetPassword(email)
+
+            res.status(data.status).json(data.data)
+
+        } catch (error) {
+            console.log(error);
+            next(new ErrorHandler())
+
+        }
+    }
+    async verifyForgetPassword(req: req, res: res, next: next) {
+        try {
+
+            const { token, password } = req.body
+            const data = await this.studentUsecase.verifyForgetPassword(token, password)
+            res.status(data.status).json(data.data)
+        } catch (error) {
+            console.log(error);
+            next(new ErrorHandler())
+
+        }
+
+
+
+    }
+
+    async getAllMentors(req: req, res: res, next: next) {
+
+        try {
+
+            const data = await this.studentUsecase.getAllMentors()
+            res.status(data.status).json(data.data)
+
+
+        } catch (error) {
+            console.log(error);
+            next(new ErrorHandler())
+        }
+
+
+    }
+
+
 }
+
 

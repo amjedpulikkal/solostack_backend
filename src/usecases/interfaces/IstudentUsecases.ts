@@ -8,5 +8,7 @@ export interface IstudenUsecases{
     verifyStudentAccount(email:string,otp:string):Promise<string|number>;
     oauthSuccuss(user:Istudent):Promise<string>
     login(email: string, password: string):Promise<ResponseObj> 
+    forgetPassword(email: string):Promise<ResponseObj>
+    verifyForgetPassword(token: string, password: string): Promise<ResponseObj> 
     
 }

@@ -1,6 +1,7 @@
 
 import { JwtPayload } from "../../../infrastructure/@types/type"; 
 import Istudent from "../../../entities/student";
+import Imentor from "../../../entities/mentor";
 import { Profile as GitHubProfile } from 'passport-github2';
 import { Profile as LinkedInProfile } from 'passport-linkedin-oauth2';
 import { Profile as GoogleProfile } from 'passport-google-oauth20';
@@ -25,7 +26,7 @@ export interface IHashpassword {
 export interface Itoken {
 
     verifyJwtToken(token: string): JwtPayload | boolean 
-    singToken(payload: Istudent|{email:string,_id:string}): string;
+    singToken(payload:Imentor|Istudent|{email:string,_id:string}): string;
 }
 
 export interface PassportResponse {

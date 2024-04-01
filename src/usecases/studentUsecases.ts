@@ -9,7 +9,7 @@ import { InodeMailer } from "@interfaces/services/interface";
 import { IHashpassword } from "@interfaces/services/interface";
 import { Itoken } from "@interfaces/services/interface";
 // import { OtpTemplate } from "./ infrastructure/services/maileTamplate";
-import { OtpTemplate } from "../infrastructure/services/maileTamplate";
+import { OtpTemplate, forgetPasswordTemplate } from "../infrastructure/services/maileTamplate";
 import { JwtPayload, ResponseObj } from "@infrastructure/@types/type";
 
 
@@ -72,7 +72,7 @@ export class StudentUsecase implements IstudenUsecases {
         }
 
         const otpValid = await this.otpRepository.verifyOtp(email, otp) as singUpBody
-        console.log("Otp-->",otpValid);
+        console.log("Otp-->", otpValid);
         if (!otpValid)
             return 403
 
@@ -96,7 +96,7 @@ export class StudentUsecase implements IstudenUsecases {
         const token = this.token.singToken(payload)
         return token
     }
-    async isOauth(token: string): Promise<Istudent|boolean>{
+    async isOauth(token: string): Promise<Istudent | boolean> {
 
         const data = this.token.verifyJwtToken(token) as JwtPayload
         console.log(data);
@@ -104,7 +104,8 @@ export class StudentUsecase implements IstudenUsecases {
         if (data) {
 
             const studentData = await this.studentRepo.findById(data._id)
-            studentData.password = ""
+            // studentData.password = ""
+            console.log(data._id,studentData)
             return studentData
         }
         return false
@@ -113,7 +114,7 @@ export class StudentUsecase implements IstudenUsecases {
 
     async login(email: string, password: string): Promise<ResponseObj> {
         try {
-            const user = await this.studentRepo.findUserWithEmail(email);
+            const user = await this.studentRepo.findWithEmail(email);
 
             if (!user) {
                 return {
@@ -148,6 +149,39 @@ export class StudentUsecase implements IstudenUsecases {
             };
         }
     }
+    async forgetPassword(email: string): Promise<ResponseObj> {
+
+        const isExist = await this.studentRepo.findWithEmail(email)
+        console.log(isExist);
+
+        if (!isExist)
+            return { status: 403, data: "email not exist" }
+
+        const token = this.token.singToken({ email: isExist.email, _id: isExist._id })
+        const payload = forgetPasswordTemplate(isExist.email, isExist.personal_info.name, token)
+        const isSend = await this.mailServes.sendOtpToMail(payload)
+        console.log(isSend)
+        if (isSend)
+            return { status: 200, data: "email successfully sended" }
+    }
+    
+    async verifyForgetPassword(token: string, password: string): Promise<ResponseObj> {
+
+        const isVerified = this.token.verifyJwtToken(token) as {email:string,_id:string}
+
+        if(!isVerified)
+            return { status: 403, data: "token is invalid" }
+        if (!password)
+            return { status: 200, data: "token is valid" }
+       
+        const _id = isVerified._id
+        password = await this.hashPassword.createHash(password)
+        const data = await this.studentRepo.updatePassword(_id, password)
+        console.log(data);
+
+        return { status: 200, data: "password updated successfully" }
+    }
+
 
 
 

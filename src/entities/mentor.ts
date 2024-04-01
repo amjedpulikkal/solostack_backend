@@ -2,6 +2,7 @@
 
 
 export interface Imentor {
+    _id?:string
     email?: string;
     password: string;
     personal_info: {
@@ -19,7 +20,10 @@ export interface Imentor {
         PreferredMeetingDuration?: number;
         Ratings?: any[]; 
         YearsOfExperience?: number;
-        Availability?: Date[]; 
+        Availability?: [{
+            date:Date
+            time:Number[]
+        }]; 
         Review?: any[]; 
     };
     wallet?: number;
