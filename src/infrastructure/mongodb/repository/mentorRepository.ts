@@ -53,12 +53,12 @@ export class MentorRepository implements ImentorRepository {
         };
         const isExist = await mentorCollection.findOne({ email, 'account_info.Availability.date': date });
         if (isExist) {
-           const data = mentorCollection.findOneAndUpdate(
+            const data = mentorCollection.findOneAndUpdate(
                 { email, "account_info.Availability.date": date },
                 { $set: { "account_info.Availability.$.time": time } },
                 { new: true }
             );
-            return data 
+            return data
         } else {
             const data = await mentorCollection.findOneAndUpdate({ email }, { $push: { 'account_info.Availability': newAvailability } },)
             return data
@@ -82,5 +82,29 @@ export class MentorRepository implements ImentorRepository {
         console.log("++++++++  ", available.account_info.Availability)
         console.log("++++++++  ", filteredData)
         return filteredData[0]
+    }
+    async getAllMentors(): Promise<Imentor[]> {
+
+        return await mentorCollection.find({}, { password: 0 })
+
+    }
+
+    // async getAllMentorWithDate(date) {
+
+    //     const data = await mentorCollection.find({}, { password: 0 })
+
+    //     return data.filter(obj=>{
+    //         return obj.account_info.Availability.filter(obj => obj.date === date)
+    //     })
+    // }
+
+    async getMentorProfile(userName:string):Promise<Imentor>{
+        return await mentorCollection.findOne({"personal_info.userName":userName})
+    }
+
+    async updateUserPhoto(id:string,photoPath:string):Promise<Imentor>{
+
+        return await mentorCollection.findByIdAndUpdate(id,{"personal_info.photo":photoPath})
+
     }
 } 

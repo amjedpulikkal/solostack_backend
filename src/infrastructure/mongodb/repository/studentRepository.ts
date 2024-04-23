@@ -70,4 +70,8 @@ export class StudentRepository implements IstudentRepository {
 
     }
 
+    async isUserNameExist(userName:string):Promise<Boolean>{
+        return !!await studentCollection.findOne({"personal_info.userName":userName})
+    }
+
 }

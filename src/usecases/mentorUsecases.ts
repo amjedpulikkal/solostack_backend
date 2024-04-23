@@ -1,15 +1,16 @@
 
 import { singUpBody } from "@infrastructure/@types/reqBodey";
 import { Iotprepository } from "@interfaces/repositroey/IOtRepository";
-import { Iuuid } from "@interfaces/services/interface";
+import { IAwsS2, Iuuid } from "@interfaces/services/interface";
 import { InodeMailer } from "@interfaces/services/interface";
 import { IHashpassword } from "@interfaces/services/interface";
 import { Itoken } from "@interfaces/services/interface";
 import { ImentorRepository } from "@interfaces/repositroey/ImentorRepository"
 import { ImentorUseCases } from "@interfaces/ImentorUseCases";
 import { OtpTemplate, forgetPasswordTemplate } from "../infrastructure/services/maileTamplate";
-import { JwtPayload, ResponseObj } from "@infrastructure/@types/type";
+import { JwtPayload, ResponseObj, file } from "@infrastructure/@types/type";
 import { Imentor } from "@entities/mentor";
+import { req } from "@infrastructure/@types/serverTypes";
 export class MentorUseCases implements ImentorUseCases {
     private mailServes: InodeMailer;
     private mentorRepo: ImentorRepository;
@@ -17,13 +18,15 @@ export class MentorUseCases implements ImentorUseCases {
     private uuid: Iuuid;
     private hashPassword: IHashpassword;
     private token: Itoken;
+    private staticFile: IAwsS2;
     constructor(
         mentorRepo: ImentorRepository,
         otpRepository: Iotprepository,
         uuid: Iuuid,
         nodeMailer: InodeMailer,
         hashPassword: IHashpassword,
-        token: Itoken
+        token: Itoken,
+        staticFile: IAwsS2
     ) {
         this.otpRepository = otpRepository
         this.mentorRepo = mentorRepo
@@ -31,6 +34,7 @@ export class MentorUseCases implements ImentorUseCases {
         this.mailServes = nodeMailer
         this.hashPassword = hashPassword
         this.token = token
+        this.staticFile = staticFile
     }
 
     async createMentorAccount(mentor: singUpBody): Promise<ResponseObj> {
@@ -130,12 +134,50 @@ export class MentorUseCases implements ImentorUseCases {
 
         const data = await this.mentorRepo.gatAvailableTimeWithDate(mentor._id, date)
 
-        console.log("data",data)
-       
+        console.log("data", data)
+
         return { data, status: 200 }
 
     }
- account_info
+    async getAllMentors(data: Date): Promise<ResponseObj> {
+        if (data) {
+
+            // const allMentors = await this.mentorRepo.getAllMentorsWithDate(data)
+
+            // return { data: allMentors, status: 200 }
+
+        } else {
+
+            const allMentors = await this.mentorRepo.getAllMentors()
+
+
+            return { data: allMentors, status: 200 }
+        }
+    }
+    async getMentorProfile(userName: string): Promise<ResponseObj> {
+
+
+        const data = await this.mentorRepo.getMentorProfile(userName)
+        if (data)
+            return { data, status: 200 }
+
+        return { data, status: 400 }
+    }
+
+    async updateProfilePhoto(mentor: Imentor, file: file): Promise<ResponseObj> {
+        console.log(file)
+        const imagePath = await this.staticFile.uploadFile(file.buffer, file.originalname)
+
+        if (imagePath && imagePath !== true) {
+            const data = await this.mentorRepo.updateUserPhoto(mentor._id, imagePath)
+
+            return { data, status: 200 }
+        } else {
+            return { data: "", status: 500 }
+        }
+
+
+    }
 
 
 }

@@ -25,3 +25,7 @@ export type ResponseObj={
     
 
 }
+
+
+export type file = Express.Multer.File
+

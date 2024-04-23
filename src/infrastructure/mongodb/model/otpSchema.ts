@@ -12,6 +12,7 @@ const otpSchema = new Schema<IOtp>({
     },
     otp:{
         type:Number,
+        unique:true,
         required:true,
         
     },

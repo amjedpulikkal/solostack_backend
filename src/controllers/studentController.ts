@@ -102,7 +102,7 @@ export class studentController {
                     httpOnly: true,
                     secure: true,
                     sameSite: 'strict',
-                    maxAge: 3600000,
+                    maxAge: 604800000,
                     path: '/',
                 });
                 console.log(token);
@@ -181,7 +181,7 @@ export class studentController {
                     httpOnly: true,
                     secure: true,
                     sameSite: 'strict',
-                    maxAge: 3600000,
+                    maxAge: 604800000,
                     path: '/',
                 }).status(data.status).json(data.data);
 
@@ -227,22 +227,22 @@ export class studentController {
 
 
     }
-
-    async getAllMentors(req: req, res: res, next: next) {
-
+    async isUserNameExist(req: req, res: res, next: next) {
         try {
-
-            const data = await this.studentUsecase.getAllMentors()
+            const { userName } = req.body
+            const data = await this.studentUsecase.isUserNameExist(userName)
             res.status(data.status).json(data.data)
-
-
         } catch (error) {
             console.log(error);
             next(new ErrorHandler())
+
         }
 
 
+
     }
+
+  
 
 
 }

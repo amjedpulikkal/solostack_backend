@@ -21,6 +21,7 @@ export interface Imentor {
         Ratings?: any[]; 
         YearsOfExperience?: number;
         Availability?: [{
+            data: (import("mongoose").Document<unknown, {}, Imentor> & Imentor & Required<{ _id: string; }>)[];
             date:Date
             time:Number[]
         }]; 

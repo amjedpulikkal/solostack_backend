@@ -16,6 +16,7 @@ const router = Router()
 
 router.post("/register",(req,res,next)=>{studentCtrl.createStudentAccount(req,res,next)})
 router.post("/verify",(req,res,next)=>{studentCtrl.verifyStudentAccount(req,res,next)})
+router.post("/userName-validate",(req,res,next)=>{studentCtrl.isUserNameExist(req,res,next)})
 
 router.post("/forgetPassword",(req,res,next)=>{studentCtrl.forgetPassword(req,res,next)})
 router.post("/verifyForgetPassword",(req,res,next)=>{studentCtrl.verifyForgetPassword(req,res,next)})

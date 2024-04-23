@@ -29,13 +29,15 @@ export class StudentUsecase implements IstudenUsecases {
     private uuid: Iuuid;
     private hashPassword: IHashpassword;
     private token: Itoken;
+    private staticFile;
     constructor(
         studentRepo: IstudentRepository,
         otpRepository: Iotprepository,
         uuid: Iuuid,
         nodeMailer: InodeMailer,
         hashPassword: IHashpassword,
-        token: Itoken
+        token: Itoken,
+        staticFile
     ) {
         this.otpRepository = otpRepository
         this.studentRepo = studentRepo
@@ -43,6 +45,7 @@ export class StudentUsecase implements IstudenUsecases {
         this.mailServes = nodeMailer
         this.hashPassword = hashPassword
         this.token = token
+        this.staticFile = staticFile
     }
 
 
@@ -84,7 +87,6 @@ export class StudentUsecase implements IstudenUsecases {
         const token = this.token.singToken(student)
 
         return token
-
     }
 
     async oauthSuccuss(user: Istudent): Promise<string> {
@@ -105,7 +107,7 @@ export class StudentUsecase implements IstudenUsecases {
 
             const studentData = await this.studentRepo.findById(data._id)
             // studentData.password = ""
-            console.log(data._id,studentData)
+            console.log(data._id, studentData)
             return studentData
         }
         return false
@@ -164,22 +166,45 @@ export class StudentUsecase implements IstudenUsecases {
         if (isSend)
             return { status: 200, data: "email successfully sended" }
     }
-    
+
     async verifyForgetPassword(token: string, password: string): Promise<ResponseObj> {
 
-        const isVerified = this.token.verifyJwtToken(token) as {email:string,_id:string}
+        const isVerified = this.token.verifyJwtToken(token) as { email: string, _id: string }
 
-        if(!isVerified)
+        if (!isVerified)
             return { status: 403, data: "token is invalid" }
         if (!password)
             return { status: 200, data: "token is valid" }
-       
+
         const _id = isVerified._id
         password = await this.hashPassword.createHash(password)
         const data = await this.studentRepo.updatePassword(_id, password)
         console.log(data);
 
         return { status: 200, data: "password updated successfully" }
+    }
+
+
+    async isUserNameExist(userName: string): Promise<ResponseObj> {
+
+        if ((await this.studentRepo.isUserNameExist(userName))) {
+
+            const nouns = ['Coder', 'Developer', 'Programmer', 'Hacker', 'Ninja', 'Guru', 'Wizard', 'Geek', 'Techie'];
+            const userNames = []
+            for (let i = 0; i <= 3; i++) {
+                const randomNoun = nouns[Math.floor(Math.random() * nouns.length)];
+                const randomNumber = Math.floor(Math.random() * 9000) + 1000;
+                userNames.push(`${userName}_${randomNoun}_${randomNumber}`)
+            }
+
+
+            return { status: 400, data: userNames }
+
+        }
+
+        return { status: 200, data: "user name is  valid" }
+
+
     }
 
 

@@ -18,7 +18,7 @@ export const isAuthenticated = async (
         accessToken,
         process.env.jwtSecret as Secret
     )) as JwtPayload;
-
+       
     if (!decode)
         return res.status(400).json("Access Token is invalid")
 

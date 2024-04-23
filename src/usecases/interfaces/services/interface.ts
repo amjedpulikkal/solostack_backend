@@ -53,3 +53,7 @@ export interface IPassport {
     ): IPassport;
 
 }
+export interface IAwsS2{
+
+    uploadFile(file: Buffer, type: string): Promise<string | boolean> ;
+}

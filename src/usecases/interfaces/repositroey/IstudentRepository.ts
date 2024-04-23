@@ -10,5 +10,6 @@ export interface IstudentRepository{
     upsertStudent(student: { email: string, name: string, password?: string, photos?: string }): Promise<Istudent>
     findById(_id:string):Promise<Istudent>
     updatePassword(_id:string,password:string)
+    isUserNameExist(userName:string):Promise<Boolean>
 }
 
