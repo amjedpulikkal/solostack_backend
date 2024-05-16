@@ -2,7 +2,7 @@ export interface IOtp {
     author:{
         email:string
         password:string
-        name?:string
+        userName?:string
     };
     otp:Number;
     ex?:Date

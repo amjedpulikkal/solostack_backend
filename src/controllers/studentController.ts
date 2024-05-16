@@ -136,10 +136,10 @@ export class studentController {
     async isOauth(req: req, res: res, next: next,) {
         try {
             const studentData = await this.studentUsecase.isOauth(req.cookies?.jwtToken)
-
+            console.log("student",studentData)
             if (studentData)
                 return res.status(200).json(studentData)
-
+            
             return res.status(401).json(statusCodes[401])
 
         } catch (error) {

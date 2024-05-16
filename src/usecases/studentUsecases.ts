@@ -60,7 +60,7 @@ export class StudentUsecase implements IstudenUsecases {
 
         const otp = this.uuid.generateOTPFromUUID()
         console.log(otp)
-        const template = OtpTemplate(student.email, otp, student.name)
+        const template = OtpTemplate(student.email, otp, student.userName)
         await this.mailServes.sendOtpToMail(template)
 
         await this.otpRepository.createNewOtp(otp, student)

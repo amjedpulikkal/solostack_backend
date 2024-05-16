@@ -14,15 +14,14 @@ export const isAuthenticated = async (
     if (!accessToken)
         return res.status(400).json("Access Token is invalid")
 
-    const decode = (await jwt.verify(
+    const decode = jwt.verify(
         accessToken,
         process.env.jwtSecret as Secret
-    )) as JwtPayload;
-       
+    ) as JwtPayload;
+        
     if (!decode)
         return res.status(400).json("Access Token is invalid")
-
-   
+    
     req.user = decode
     console.log(decode)
     console.log("success from isAuth");

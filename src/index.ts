@@ -1,10 +1,18 @@
-require("dotenv").config();
-import app from "./infrastructure/server/config/app";
-import { dbConnect } from "./infrastructure/server/config/db";
-const port:string|number = process.env.PORT || 3001
+
+import { server } from './infrastructure/services/socketIo';
+import { dbConnect } from './infrastructure/server/config/db';
+import { esClientConnection } from './infrastructure/server/config/elasticsearch';
 
 
-app.listen(port,()=>{
+const port: number | string = process.env.PORT || 3001;
+
+server.listen(port, () => {
+    esClientConnection()
     dbConnect()
-    console.log("start",port)
-})
+    .then(() => {
+        console.log(`Server running on port ${port}`);
+    })
+    .catch((error) => {
+        console.error('Error connecting to the database:', error);
+    });
+});

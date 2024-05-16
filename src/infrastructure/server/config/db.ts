@@ -9,6 +9,7 @@ export async function dbConnect() {
         console.log(data.connection.host)
     } catch (error: any) {
         console.log(error)
+        
         setTimeout(dbConnect,5000)
     }
 

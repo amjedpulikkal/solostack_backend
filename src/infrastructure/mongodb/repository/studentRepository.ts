@@ -13,14 +13,14 @@ export class StudentRepository implements IstudentRepository {
 
         return isExist ? true : false
     }
-    async newStudent(student: { email: string, name: string, password?: string, photos?: string }): Promise<Istudent> {
+    async newStudent(student: { email: string, userName?: string, password?: string, photos?: string }): Promise<Istudent> {
 
         const Student: Istudent = {
             email: student.email,
             password: student.password || "",
             personal_info: {
-                userName: "",
-                name: student.name,
+                userName: student.userName,
+                name: student.userName,
                 age: 0,
                 bio: "",
                 photo: student.photos || ""

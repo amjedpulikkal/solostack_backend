@@ -1,7 +1,6 @@
 
 import multer from 'multer'
 import { Request, Response, NextFunction } from "express"
-
 export function uploadFileToBuffer(req: Request, res: Response, next: NextFunction) {
     const storage = multer.memoryStorage();
     const upload = multer({ storage: storage }).single('image');

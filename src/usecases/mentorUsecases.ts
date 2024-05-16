@@ -1,7 +1,7 @@
 
 import { singUpBody } from "@infrastructure/@types/reqBodey";
 import { Iotprepository } from "@interfaces/repositroey/IOtRepository";
-import { IAwsS2, Iuuid } from "@interfaces/services/interface";
+import { IAwsS2, Iuuid, ISharp } from "@interfaces/services/interface";
 import { InodeMailer } from "@interfaces/services/interface";
 import { IHashpassword } from "@interfaces/services/interface";
 import { Itoken } from "@interfaces/services/interface";
@@ -11,6 +11,7 @@ import { OtpTemplate, forgetPasswordTemplate } from "../infrastructure/services/
 import { JwtPayload, ResponseObj, file } from "@infrastructure/@types/type";
 import { Imentor } from "@entities/mentor";
 import { req } from "@infrastructure/@types/serverTypes";
+import { IreviewRepository } from "@interfaces/repositroey/IreviewRepository";
 export class MentorUseCases implements ImentorUseCases {
     private mailServes: InodeMailer;
     private mentorRepo: ImentorRepository;
@@ -19,22 +20,28 @@ export class MentorUseCases implements ImentorUseCases {
     private hashPassword: IHashpassword;
     private token: Itoken;
     private staticFile: IAwsS2;
+    private imageResize: ISharp;
+    private reviewRepository: IreviewRepository;
     constructor(
         mentorRepo: ImentorRepository,
+        reviewRepo:IreviewRepository ,
         otpRepository: Iotprepository,
         uuid: Iuuid,
         nodeMailer: InodeMailer,
         hashPassword: IHashpassword,
         token: Itoken,
-        staticFile: IAwsS2
+        staticFile: IAwsS2,
+        sharp: ISharp
     ) {
         this.otpRepository = otpRepository
+        this.reviewRepository = reviewRepo
         this.mentorRepo = mentorRepo
         this.uuid = uuid
         this.mailServes = nodeMailer
         this.hashPassword = hashPassword
         this.token = token
         this.staticFile = staticFile
+        this.imageResize = sharp
     }
 
     async createMentorAccount(mentor: singUpBody): Promise<ResponseObj> {
@@ -51,7 +58,7 @@ export class MentorUseCases implements ImentorUseCases {
 
         const otp = this.uuid.generateOTPFromUUID()
         console.log(otp)
-        const template = OtpTemplate(mentor.email, otp, mentor.name)
+        const template = OtpTemplate(mentor.email, otp, mentor.userName)
 
         await this.mailServes.sendOtpToMail(template)
 
@@ -69,7 +76,7 @@ export class MentorUseCases implements ImentorUseCases {
         }
 
         const otpValid = await this.otpRepository.verifyOtp(email, otp) as singUpBody
-        console.log("Otp-->", otpValid);
+        console.log("Otp-------------->", otpValid);
         if (!otpValid)
             return { status: 403, data: "otp not valid" }
 
@@ -83,7 +90,7 @@ export class MentorUseCases implements ImentorUseCases {
         return { status: 201, token, data: mentor }
 
     }
-    async login(email: string, password: string): Promise<ResponseObj> {
+    async login(email: string, password: string,): Promise<ResponseObj> {
         try {
             const user = await this.mentorRepo.findWithEmail(email);
 
@@ -121,30 +128,46 @@ export class MentorUseCases implements ImentorUseCases {
         }
     }
 
-    async updateAvailableTime(email: string, date: { date: Date, time: number[] }): Promise<ResponseObj> {
-
-        const data = await this.mentorRepo.pushNewDate(email, date)
+    async updateAvailableTime(mentor: Imentor, date: { date: Date, time: number[] }): Promise<ResponseObj> {
+        console.log(date)
+        const data = await this.reviewRepository.createNewReview(date.date,date.time,mentor._id)
 
         return { data, status: 200 }
     }
 
     async getAvailableTime(mentor: Imentor, date: Date): Promise<ResponseObj> {
+        console.log(date,"------------")
 
-        console.log(date)
+        const data = await this.reviewRepository.getAvailableTime(mentor._id, date)
 
-        const data = await this.mentorRepo.gatAvailableTimeWithDate(mentor._id, date)
-
-        console.log("data", data)
+        // console.log("data", data)
+        // console.table(data)
 
         return { data, status: 200 }
 
+
     }
-    async getAllMentors(data: Date): Promise<ResponseObj> {
-        if (data) {
+    async getAllMentorAvailableTime(date:Date,time:number): Promise<ResponseObj>{
 
-            // const allMentors = await this.mentorRepo.getAllMentorsWithDate(data)
+        console.log(date,"------date------")
 
-            // return { data: allMentors, status: 200 }
+        const data = await this.reviewRepository.getAllMentorAvailableTime(date,time)
+
+      
+
+        return { data, status: 200 }
+
+
+
+
+    }
+    async getAllMentors(date: Date): Promise<ResponseObj> {
+        if (date) {
+
+              const allMentors = await this.reviewRepository.getAllMentorsWithDate(date)
+            console.log("allMentors",allMentors)
+
+            return { data: allMentors, status: 200 }
 
         } else {
 
@@ -166,17 +189,27 @@ export class MentorUseCases implements ImentorUseCases {
 
     async updateProfilePhoto(mentor: Imentor, file: file): Promise<ResponseObj> {
         console.log(file)
+
+        file.buffer = await this.imageResize.resizeImage(file.buffer, 460, 460)
         const imagePath = await this.staticFile.uploadFile(file.buffer, file.originalname)
 
         if (imagePath && imagePath !== true) {
             const data = await this.mentorRepo.updateUserPhoto(mentor._id, imagePath)
-
+            data.personal_info.photo = imagePath
+            delete data.password
             return { data, status: 200 }
         } else {
             return { data: "", status: 500 }
         }
 
 
+    }
+
+    async storeRequest({data,mentorRVId,user}): Promise<ResponseObj> {
+
+        
+         const resData = await  this.reviewRepository.storeRequest(data,mentorRVId,user._id)
+        return {data:resData,status:200}
     }
 
 

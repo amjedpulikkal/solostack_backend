@@ -11,17 +11,19 @@ export class OtpRepository implements Iotprepository {
         this.otpModel = otpModel
     }
 
-    async createNewOtp(otp_n: number, author: { email: string, password?: string }): Promise<IOtp> {
+    async createNewOtp(otp_n: number, author: { email: string, password?: string,userName:string }): Promise<IOtp> {
         console.log(author);
 
         const Otp: IOtp = {
             author: {
                 email: author.email,
-                password: author.password!
+                password: author.password!,
+                userName: author.userName
             },
             otp: otp_n,
         }
         console.log("-------------")
+        console.log(Otp )
         const newOtp = await this.otpModel.create(Otp)
 
         return newOtp

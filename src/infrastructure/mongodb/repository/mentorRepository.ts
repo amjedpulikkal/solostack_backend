@@ -11,14 +11,14 @@ export class MentorRepository implements ImentorRepository {
         console.log(isExist)
         return isExist ? true : false
     }
-    async newMentor(mentor: { email: string, name: string, password?: string, photos?: string }): Promise<Imentor> {
+    async newMentor(mentor: { email: string, userName: string, password?: string, photos?: string }): Promise<Imentor> {
 
         const Mentor: Imentor = {
             email: mentor.email,
             password: mentor.password || "",
             personal_info: {
-                userName: "",
-                name: mentor.name,
+                userName: mentor.userName,
+                name: mentor.userName   ,
                 bio: "",
                 photo: mentor.photos || ""
             },
@@ -89,14 +89,15 @@ export class MentorRepository implements ImentorRepository {
 
     }
 
-    // async getAllMentorWithDate(date) {
+    async getAllMentorWithDate(date) {
 
-    //     const data = await mentorCollection.find({}, { password: 0 })
+        const data = await mentorCollection.find({}, { password: 0 })
 
-    //     return data.filter(obj=>{
-    //         return obj.account_info.Availability.filter(obj => obj.date === date)
-    //     })
-    // }
+        return data.filter(obj=>{
+            return obj.account_info.Availability.filter(obj =>
+                 obj.date === date)
+        })
+    }
 
     async getMentorProfile(userName:string):Promise<Imentor>{
         return await mentorCollection.findOne({"personal_info.userName":userName})

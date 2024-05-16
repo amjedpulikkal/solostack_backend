@@ -101,7 +101,7 @@ export default class MentorController {
             const user = req.user as Imentor
 
             console.log(user)
-            const data = await this.mentorUseCases.updateAvailableTime(user?.email, { date, time })
+            const data = await this.mentorUseCases.updateAvailableTime(user,{ date, time })
 
 
             res.status(data.status).json(data.data)
@@ -113,14 +113,31 @@ export default class MentorController {
         }
     }
 
+    async getAllAvailableTime(req: req, res: res, next: next) {
+        try{
+
+            const {date,time} = req.body
+
+            const data = await this.mentorUseCases.getAllMentorAvailableTime(date,time)
+            // console.log(date, data)
+            res.status(data.status).json(data.data)
+
+        }catch(error){
+            console.error(error)
+            next(new ErrorHandler())
+
+        }
+    }
+
     async getAvailableTime(req: req, res: res, next: next) {
 
         try {
-            const { date } = req.body
+            const { date} = req.body
             console.log(req.body)
             const user = req.user as Imentor
+            
             const data = await this.mentorUseCases.getAvailableTime(user, date)
-            console.log(date, data)
+            // console.log(date, data)
             res.status(data.status).json(data.data)
 
 
@@ -161,6 +178,7 @@ export default class MentorController {
         }
 
     }
+    
     async updateMentorProfilePhoto(req: req, res: res, next: next) {
         try {
 
@@ -177,6 +195,20 @@ export default class MentorController {
 
     }
 
+    async storeRequest(req: req, res: res, next: next) {
+        try {
+            
+            console.log(req.body)
+
+            const data = await this.mentorUseCases.storeRequest({...req.body,user:req.user})
+            res.status(data.status).json(data.data)
+            
+        } catch (error) {
+            console.log(error);
+            next(new ErrorHandler())
+        }   
+
+    }
 
 
 

@@ -57,3 +57,7 @@ export interface IAwsS2{
 
     uploadFile(file: Buffer, type: string): Promise<string | boolean> ;
 }
+
+export interface ISharp{
+    resizeImage(input:Buffer,width:number,hight:number):Promise<Buffer>
+}

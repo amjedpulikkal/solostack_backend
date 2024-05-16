@@ -7,9 +7,10 @@ export interface ImentorUseCases {
     createMentorAccount(mentor:singUpBody): Promise<ResponseObj> ;
     verifyMentorAccount(email: string, otp: string): Promise<ResponseObj> ;
     login(email: string, password: string): Promise<ResponseObj>;
-    updateAvailableTime(email: string, date: { date: Date, time: number[] }):  Promise<ResponseObj>;
-    getAvailableTime(mentor: Imentor, date: Date): Promise<ResponseObj>;
+    updateAvailableTime(mentor: Imentor, date: { date: Date, time: number[] }):  Promise<ResponseObj>;
+    getAvailableTime(mentor: Imentor, date: Date,): Promise<ResponseObj>;
+    getAllMentorAvailableTime(date:Date,time:number): Promise<ResponseObj>
     getMentorProfile(userName:string): Promise<ResponseObj>;
     updateProfilePhoto(mentor: Imentor, file: file): Promise<ResponseObj>
-  
+    storeRequest({data,mentorRVId,user}): Promise<ResponseObj> 
 }
