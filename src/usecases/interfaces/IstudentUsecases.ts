@@ -12,4 +12,5 @@ export interface IstudenUsecases{
     forgetPassword(email: string):Promise<ResponseObj>
     verifyForgetPassword(token: string, password: string): Promise<ResponseObj> 
     isUserNameExist(userName: string): Promise<ResponseObj> 
+    searchStudent(): Promise<ResponseObj>
 }

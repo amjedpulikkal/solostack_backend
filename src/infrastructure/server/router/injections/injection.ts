@@ -14,8 +14,13 @@ import { AwsS3 } from "../../../../infrastructure/services/aws/s3"
 import { Sharp } from "../../../../infrastructure/services/imageResize "
 import { ReviewRepository } from "../../../../infrastructure/mongodb/repository/reviewRepository"
 import { reviewModel } from "../../../../infrastructure/mongodb/model/reviewSchema"
+import { chatGroupUseCases } from "../../../../usecases/chatUseCases"
+import { chatGroupRepo } from "../../../../infrastructure/mongodb/repository/chatGroupRepository"
+import { chatMessageRepository } from "../../../mongodb/repository/chatMessageRepository"
 
-const studentRepo = new StudentRepository()
+import { chatGroup } from "../../../../controllers/chatGroupController"
+
+const studentRepo = new StudentRepository() 
 const uuid = new Uuid()
 const otpRepository = new OtpRepository(OtpModel)
 const reviewRepository =new ReviewRepository(reviewModel)
@@ -50,5 +55,17 @@ const mentorUseCases = new MentorUseCases(
 
 )
 
+const ChatGroupRepo = new chatGroupRepo()
+const chatMessageRepo = new chatMessageRepository()
+export const ChatGroupUseCases  = new chatGroupUseCases(
+    ChatGroupRepo,
+    chatMessageRepo,
+    staticFile,
+    sharp
+)
+
+
+
+export const chatCtrl = new chatGroup(ChatGroupUseCases)
 export const mentorCtrl = new Mentor(mentorUseCases)
 export const studentCtrl = new studentController(studentUsecase)

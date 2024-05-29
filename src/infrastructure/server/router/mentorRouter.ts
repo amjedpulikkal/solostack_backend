@@ -18,6 +18,7 @@ router.post("/get-all-available-time",isAuthenticated,(req,res,next)=>{mentorCtr
 router.post("/get-all-mentors",isAuthenticated,(req,res,next)=>{mentorCtrl.getAllMentors(req,res,next)})
 router.put("/update-image",isAuthenticated,uploadFileToBuffer,(req,res,next)=>{mentorCtrl.updateMentorProfilePhoto(req,res,next)})
 router.put("/student/storeRequest",isAuthenticated,(req,res,next)=>{mentorCtrl.storeRequest(req,res,next)})
+router.get("/searchMentor",(req,res,next)=>mentorCtrl.searchMentor(req,res,next))
 
 
 

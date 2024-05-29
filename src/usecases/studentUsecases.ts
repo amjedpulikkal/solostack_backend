@@ -207,6 +207,11 @@ export class StudentUsecase implements IstudenUsecases {
 
     }
 
+    async searchStudent(): Promise<ResponseObj> {
+        const data = await this.studentRepo.getAllStudents()
+        return {data,status:200}
+    }
+
 
 
 

@@ -73,5 +73,7 @@ export class StudentRepository implements IstudentRepository {
     async isUserNameExist(userName:string):Promise<Boolean>{
         return !!await studentCollection.findOne({"personal_info.userName":userName})
     }
-
+    async getAllStudents():Promise<Istudent[]> {
+        return await studentCollection.find({},{password:0})
+    }
 }

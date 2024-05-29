@@ -42,5 +42,7 @@ router.post("/signOut",(req,res,next)=>{studentCtrl.signOut(req,res,next)})
 router.post("/login",(req,res,next)=>{studentCtrl.login(req,res,next)})
 
 
+router.get("/searchStudent",(req,res,next)=>{studentCtrl.searchStudent(req,res,next)})
+
 
 export default router

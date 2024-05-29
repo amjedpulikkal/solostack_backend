@@ -241,6 +241,14 @@ export class studentController {
 
 
     }
+    async searchStudent(req:req,res:res,next:next){
+        try {
+            const data =  await this.studentUsecase.searchStudent()
+            res.status(data.status).json(data.data)
+        } catch (error) {
+            
+        }
+    }
 
   
 

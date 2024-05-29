@@ -11,5 +11,6 @@ export interface IstudentRepository{
     findById(_id:string):Promise<Istudent>
     updatePassword(_id:string,password:string)
     isUserNameExist(userName:string):Promise<Boolean>
+    getAllStudents():Promise<Istudent[]> 
 }
 

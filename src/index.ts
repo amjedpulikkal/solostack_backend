@@ -6,6 +6,7 @@ import { esClientConnection } from './infrastructure/server/config/elasticsearch
 
 const port: number | string = process.env.PORT || 3001;
 
+
 server.listen(port, () => {
     esClientConnection()
     dbConnect()

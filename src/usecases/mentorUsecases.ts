@@ -207,10 +207,16 @@ export class MentorUseCases implements ImentorUseCases {
 
     async storeRequest({data,mentorRVId,user}): Promise<ResponseObj> {
 
-        
+                    
          const resData = await  this.reviewRepository.storeRequest(data,mentorRVId,user._id)
         return {data:resData,status:200}
     }
 
+    async searchMentor():Promise<ResponseObj>{
+
+        const resData = await this.mentorRepo.getAllMentors()
+        return {data:resData,status:200}
+        
+    }
 
 }

@@ -1,6 +1,6 @@
 export class ErrorHandler extends Error {
     statusCode: number;
-    constructor(statusCode?: number,message = "Internal Server Error") {
+    constructor(message = "Internal Server Error",statusCode?: number) {
       super(message);
       this.statusCode = statusCode || 500
       Error.captureStackTrace(this, ErrorHandler);
