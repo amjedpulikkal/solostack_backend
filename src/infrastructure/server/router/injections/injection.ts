@@ -12,8 +12,12 @@ import { MentorUseCases } from "../../../../usecases/mentorUsecases"
 import { MentorRepository } from "../../../../infrastructure/mongodb/repository/mentorRepository"
 import { AwsS3 } from "../../../../infrastructure/services/aws/s3"
 import { Sharp } from "../../../../infrastructure/services/imageResize "
-import { ReviewRepository } from "../../../../infrastructure/mongodb/repository/reviewRepository"
-import { reviewModel } from "../../../../infrastructure/mongodb/model/reviewSchema"
+import { ReviewRepository as ReviewTimeRepository  } from "../../../mongodb/repository/reviewTimeRepository"
+import { ReviewRepository  } from "../../../mongodb/repository/reiewRepository"
+
+import { reviewModel as reviewTimeModel  } from "../../../mongodb/model/reviewTimeSchema"
+import { reviewModel  } from "../../../mongodb/model/reviewSchema"
+
 import { chatGroupUseCases } from "../../../../usecases/chatUseCases"
 import { chatGroupRepo } from "../../../../infrastructure/mongodb/repository/chatGroupRepository"
 import { chatMessageRepository } from "../../../mongodb/repository/chatMessageRepository"
@@ -23,7 +27,9 @@ import { chatGroup } from "../../../../controllers/chatGroupController"
 const studentRepo = new StudentRepository() 
 const uuid = new Uuid()
 const otpRepository = new OtpRepository(OtpModel)
-const reviewRepository =new ReviewRepository(reviewModel)
+const reviewTimeRepository =new ReviewTimeRepository(reviewTimeModel)
+
+const reviewRepository  = new ReviewRepository(reviewModel)
 const nodemailer = new Nodemailer()
 const hashPassword = new Encrypt()
 const staticFile = new AwsS3()
@@ -36,22 +42,23 @@ const studentUsecase = new StudentUsecase(
     nodemailer,
     hashPassword,
     token,
-    staticFile
-    
+    staticFile,
+    reviewRepository
 )
 
 const mentorRepository = new MentorRepository()
 
 const mentorUseCases = new MentorUseCases(
     mentorRepository,
-    reviewRepository,
+    reviewTimeRepository,
     otpRepository,
     uuid,
     nodemailer,
     hashPassword,
     token,
     staticFile,
-    sharp
+    sharp,
+    reviewRepository
 
 )
 

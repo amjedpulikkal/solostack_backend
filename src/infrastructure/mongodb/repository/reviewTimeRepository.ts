@@ -35,7 +35,7 @@ export class ReviewRepository implements IreviewRepository {
         const options = { upsert: true, new: true };
         return await this.reviewModel.findOneAndUpdate(filter, update, options).exec();
     }
-
+    
     async getAvailableTime(_id: string, date: Date): Promise<IReview[]> {
         console.log(date,"===============",new ObjectId(_id))
         return await this.reviewModel.find({mentorId: new ObjectId(_id),date:new Date(date)}).populate("requests.studentId") as IReview[]
@@ -43,7 +43,7 @@ export class ReviewRepository implements IreviewRepository {
     }
     async getAllMentorAvailableTime(date: Date,time:number): Promise<IReview[]> {
         console.log(date,"===============",time)
-        return await this.reviewModel.find({date:new Date(date),time}).populate("mentorId") as IReview[]
+        return await this.reviewModel.find({date:new Date(date),time,isBooked:false}).populate("mentorId") as IReview[]
     }
     async     getAllMentorsWithDate(date:Date){
         return await this.reviewModel.find({date:new Date(date)}).populate("mentorId")
@@ -55,6 +55,9 @@ export class ReviewRepository implements IreviewRepository {
          return await this.reviewModel.findByIdAndUpdate(mentorRvId,{$push:{requests:{studentId:id,reviewFor:data}}})
 
     }
-
+ async updateReviewTime (reviewId:string,id:string):Promise<IReview> {
+    return await this.reviewModel.findByIdAndUpdate(id,{$set:{bookedId:reviewId,isBooked:true}})
+    
+ }
 
 }

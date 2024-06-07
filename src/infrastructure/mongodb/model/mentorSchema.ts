@@ -34,7 +34,7 @@ const mentorSchema = new Schema<Imentor>({
 type mentor = InferSchemaType<typeof mentorSchema>;
 
 
-export const ObjectId = mongoose.Types.ObjectId
+    export const ObjectId = mongoose.Types.ObjectId
 const mentorModel: Model<Imentor> = mongoose.model<Imentor>('mentor', mentorSchema)
 
 export default mentorModel

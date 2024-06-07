@@ -11,6 +11,7 @@ import { Itoken } from "@interfaces/services/interface";
 // import { OtpTemplate } from "./ infrastructure/services/maileTamplate";
 import { OtpTemplate, forgetPasswordTemplate } from "../infrastructure/services/maileTamplate";
 import { JwtPayload, ResponseObj } from "@infrastructure/@types/type";
+import { IreviewRepository } from "@interfaces/repositroey/IreviewRepository";
 
 
 // class statusCode {
@@ -30,6 +31,7 @@ export class StudentUsecase implements IstudenUsecases {
     private hashPassword: IHashpassword;
     private token: Itoken;
     private staticFile;
+    private reviewRepository: IreviewRepository;
     constructor(
         studentRepo: IstudentRepository,
         otpRepository: Iotprepository,
@@ -37,7 +39,8 @@ export class StudentUsecase implements IstudenUsecases {
         nodeMailer: InodeMailer,
         hashPassword: IHashpassword,
         token: Itoken,
-        staticFile
+        staticFile,
+        reviewRepository:IreviewRepository
     ) {
         this.otpRepository = otpRepository
         this.studentRepo = studentRepo
@@ -46,6 +49,7 @@ export class StudentUsecase implements IstudenUsecases {
         this.hashPassword = hashPassword
         this.token = token
         this.staticFile = staticFile
+        this.reviewRepository = reviewRepository
     }
 
 
@@ -101,7 +105,7 @@ export class StudentUsecase implements IstudenUsecases {
     async isOauth(token: string): Promise<Istudent | boolean> {
 
         const data = this.token.verifyJwtToken(token) as JwtPayload
-        console.log(data);
+        console.log(data,"token");
 
         if (data) {
 
@@ -210,6 +214,12 @@ export class StudentUsecase implements IstudenUsecases {
     async searchStudent(): Promise<ResponseObj> {
         const data = await this.studentRepo.getAllStudents()
         return {data,status:200}
+    }
+
+    async getTodyReview({_id}): Promise<ResponseObj> {
+        const data = await  this.reviewRepository.findTodayReviewWithStudentId(_id)
+        return {data,status:200}
+
     }
 
 

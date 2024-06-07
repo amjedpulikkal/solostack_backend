@@ -9,10 +9,11 @@ import {
 } from "../middlewares/oauth2";
 import {studentCtrl} from "../../../infrastructure/server/router/injections/injection"
 import { WidgetValidation } from "../middlewares/turnstileWidget";
+import { isAuthenticated } from "../middlewares/auth";
 
 
 
- 
+
 const router = Router()
 
 router.post("/register",(req,res,next)=>{studentCtrl.createStudentAccount(req,res,next)})
@@ -44,5 +45,9 @@ router.post("/login",(req,res,next)=>{studentCtrl.login(req,res,next)})
 
 router.get("/searchStudent",(req,res,next)=>{studentCtrl.searchStudent(req,res,next)})
 
+
+
+
+router.get("/getTodyReview",isAuthenticated,(req,res,next)=>{studentCtrl.getTodyReview(req,res,next)})
 
 export default router

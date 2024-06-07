@@ -176,7 +176,15 @@ export default class MentorController {
 
   async searchMentor(req: req, res: res, next: next) {
     try {
-      const data = await this.mentorUseCases.searchMentor();
+    } catch (error) {
+      console.log(error);
+      next(new ErrorHandler());
+    }
+  }
+
+  async acceptRequest(req: req, res: res, next: next) {
+    try {
+      const data = await this.mentorUseCases.acceptRequest(req.body);
       res.status(data.status).json(data.data);
     } catch (error) {
       console.log(error);

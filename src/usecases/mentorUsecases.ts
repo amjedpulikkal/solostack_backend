@@ -11,7 +11,10 @@ import { OtpTemplate, forgetPasswordTemplate } from "../infrastructure/services/
 import { JwtPayload, ResponseObj, file } from "@infrastructure/@types/type";
 import { Imentor } from "@entities/mentor";
 import { req } from "@infrastructure/@types/serverTypes";
-import { IreviewRepository } from "@interfaces/repositroey/IreviewRepository";
+import { IreviewTimeRepository,IreviewRepository } from "@interfaces/repositroey/IreviewRepository";
+import { IReview } from "@entities/Ireview";
+
+
 export class MentorUseCases implements ImentorUseCases {
     private mailServes: InodeMailer;
     private mentorRepo: ImentorRepository;
@@ -21,20 +24,22 @@ export class MentorUseCases implements ImentorUseCases {
     private token: Itoken;
     private staticFile: IAwsS2;
     private imageResize: ISharp;
+    private reviewTimeRepository: IreviewTimeRepository;
     private reviewRepository: IreviewRepository;
     constructor(
         mentorRepo: ImentorRepository,
-        reviewRepo:IreviewRepository ,
+        reviewTimeRepo:IreviewTimeRepository ,
         otpRepository: Iotprepository,
         uuid: Iuuid,
         nodeMailer: InodeMailer,
         hashPassword: IHashpassword,
         token: Itoken,
         staticFile: IAwsS2,
-        sharp: ISharp
+        sharp: ISharp,
+        reviewRepository:IreviewRepository
     ) {
         this.otpRepository = otpRepository
-        this.reviewRepository = reviewRepo
+        this.reviewTimeRepository = reviewTimeRepo
         this.mentorRepo = mentorRepo
         this.uuid = uuid
         this.mailServes = nodeMailer
@@ -42,6 +47,7 @@ export class MentorUseCases implements ImentorUseCases {
         this.token = token
         this.staticFile = staticFile
         this.imageResize = sharp
+        this.reviewRepository = reviewRepository
     }
 
     async createMentorAccount(mentor: singUpBody): Promise<ResponseObj> {
@@ -130,7 +136,7 @@ export class MentorUseCases implements ImentorUseCases {
 
     async updateAvailableTime(mentor: Imentor, date: { date: Date, time: number[] }): Promise<ResponseObj> {
         console.log(date)
-        const data = await this.reviewRepository.createNewReview(date.date,date.time,mentor._id)
+        const data = await this.reviewTimeRepository.createNewReview(date.date,date.time,mentor._id)
 
         return { data, status: 200 }
     }
@@ -138,7 +144,7 @@ export class MentorUseCases implements ImentorUseCases {
     async getAvailableTime(mentor: Imentor, date: Date): Promise<ResponseObj> {
         console.log(date,"------------")
 
-        const data = await this.reviewRepository.getAvailableTime(mentor._id, date)
+        const data = await this.reviewTimeRepository.getAvailableTime(mentor._id, date)
 
         // console.log("data", data)
         // console.table(data)
@@ -151,9 +157,9 @@ export class MentorUseCases implements ImentorUseCases {
 
         console.log(date,"------date------")
 
-        const data = await this.reviewRepository.getAllMentorAvailableTime(date,time)
+        const data = await this.reviewTimeRepository.getAllMentorAvailableTime(date,time)
 
-      
+        console.log(data)
 
         return { data, status: 200 }
 
@@ -164,7 +170,7 @@ export class MentorUseCases implements ImentorUseCases {
     async getAllMentors(date: Date): Promise<ResponseObj> {
         if (date) {
 
-              const allMentors = await this.reviewRepository.getAllMentorsWithDate(date)
+              const allMentors = await this.reviewTimeRepository.getAllMentorsWithDate(date)
             console.log("allMentors",allMentors)
 
             return { data: allMentors, status: 200 }
@@ -208,7 +214,7 @@ export class MentorUseCases implements ImentorUseCases {
     async storeRequest({data,mentorRVId,user}): Promise<ResponseObj> {
 
                     
-         const resData = await  this.reviewRepository.storeRequest(data,mentorRVId,user._id)
+         const resData = await  this.reviewTimeRepository.storeRequest(data,mentorRVId,user._id)
         return {data:resData,status:200}
     }
 
@@ -217,6 +223,17 @@ export class MentorUseCases implements ImentorUseCases {
         const resData = await this.mentorRepo.getAllMentors()
         return {data:resData,status:200}
         
+    } 
+
+    async  acceptRequest({reviewTime,studentID}:{reviewTime:IReview,studentID:string}): Promise<ResponseObj> {
+      console.log(studentID)
+      const reviewCl =  await  this.reviewRepository.createNewReview(reviewTime,studentID)
+      console.log(reviewCl,"-----2---")
+      const data = await this.reviewTimeRepository.updateReviewTime(reviewCl._id,reviewTime._id)
+      console.log(data)
+      return {status:200,data}
+        
     }
 
 }
+

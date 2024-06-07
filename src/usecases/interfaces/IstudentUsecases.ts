@@ -13,4 +13,5 @@ export interface IstudenUsecases{
     verifyForgetPassword(token: string, password: string): Promise<ResponseObj> 
     isUserNameExist(userName: string): Promise<ResponseObj> 
     searchStudent(): Promise<ResponseObj>
+     getTodyReview({_id}): Promise<ResponseObj>
 }

@@ -1,3 +1,4 @@
+import { IReview } from "@entities/Ireview";
 import { Imentor } from "@entities/mentor";
 import { singUpBody } from "@infrastructure/@types/reqBodey";
 import { ResponseObj, file } from "@infrastructure/@types/type";
@@ -14,4 +15,5 @@ export interface ImentorUseCases {
     updateProfilePhoto(mentor: Imentor, file: file): Promise<ResponseObj>
     storeRequest({data,mentorRVId,user}): Promise<ResponseObj> 
     searchMentor():Promise<ResponseObj>
+    acceptRequest({reviewTime,studentID}:{reviewTime:IReview,studentID:string}): Promise<ResponseObj>
 }

@@ -36,7 +36,7 @@ async function PassportResponse(accessToken: string, refreshToken: string, profi
                 photos: profile.photos?.[0]?.value!
             }
             console.log(Student);
-            
+            console.log("dsdwewwwwwwwwwwww")
             const student = await db.newStudent(Student)
             return done(null, student);
         }
@@ -47,21 +47,21 @@ async function PassportResponse(accessToken: string, refreshToken: string, profi
 passport.use(new GitHubStrategy({
     clientID: process.env.gitHubClintId!,
     clientSecret: process.env.gitHubsecret!,
-    callbackURL: `${process.env.SERVER}/api/v1/student/auth/github/callback`
+    callbackURL: `${process.env.server}/api/v1/student/auth/github/callback`
 },
     PassportResponse));
 
 passport.use(new linkedStrategy({
     clientID: process.env.linkedinClintId!,
     clientSecret: process.env.linkedinSecret!,
-    callbackURL: `${process.env.SERVER}/api/v1/student/auth/linkedin/callback`
+    callbackURL: `${process.env.server}/api/v1/student/auth/linkedin/callback`
 },
     PassportResponse));
 
 passport.use(new GoogleStrategy({
     clientID: process.env.googleClintId!,
     clientSecret: process.env.googleSecret!,
-    callbackURL: `${process.env.SERVER}/api/v1/student/auth/google/callback`
+    callbackURL: `${process.env.server}/api/v1/student/auth/google/callback`
 },
     PassportResponse));
 

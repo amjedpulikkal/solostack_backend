@@ -20,6 +20,7 @@ router.put("/update-image",isAuthenticated,uploadFileToBuffer,(req,res,next)=>{m
 router.put("/student/storeRequest",isAuthenticated,(req,res,next)=>{mentorCtrl.storeRequest(req,res,next)})
 router.get("/searchMentor",(req,res,next)=>mentorCtrl.searchMentor(req,res,next))
 
+router.post("/student/acceptRequest",isAuthenticated,(req,res,next)=>mentorCtrl.acceptRequest(req,res,next))
 
 
 export default router
