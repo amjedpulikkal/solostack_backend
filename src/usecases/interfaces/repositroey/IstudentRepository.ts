@@ -1,7 +1,7 @@
 import Istudent from "../../../entities/student"
 
 
-import { singUpBody } from "../../../infrastructure/@types/reqBodey";
+import { singUpBody } from "../../../infrastructure/types/reqBodey";
 
 export interface IstudentRepository{
     ifUserExist(email:string):Promise<boolean>;

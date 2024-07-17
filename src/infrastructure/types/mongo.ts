@@ -7,6 +7,6 @@ export type DbObjectIdType = mongoose.Types.ObjectId
 
 export const ObjectId = mongoose.Types.ObjectId
 
-export const dbModel = Model 
+export const    dbModel = Model 
 
 

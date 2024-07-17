@@ -1,7 +1,7 @@
 
 import { IOtp } from "../../../entities/otp"
-import { dbModel } from "../../@types/mongo"
-import { singUpBody } from "../../@types/reqBodey"
+import { dbModel } from "../../types/mongo"
+import { singUpBody } from "../../types/reqBodey"
 import { Iotprepository } from "../../../usecases/interfaces/repositroey/IOtRepository"
 export class OtpRepository implements Iotprepository {
 

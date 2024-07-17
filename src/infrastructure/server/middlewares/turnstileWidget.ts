@@ -1,5 +1,5 @@
 
-import { req, res, next } from "@infrastructure/@types/serverTypes"
+import { req, res, next } from "@infrastructure/types/serverTypes"
 export function WidgetValidation(req: req, res: res, next: next) {
 
     console.log("sssss")

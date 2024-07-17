@@ -1,16 +1,16 @@
 import { IstudentRepository } from "./interfaces/repositroey/IstudentRepository"
 
 import Istudent from "@entities/student";
-import { singUpBody } from "@infrastructure/@types/reqBodey";
+import { singUpBody } from "@infrastructure/types/reqBodey";
 import { IstudenUsecases } from "@interfaces/IstudentUsecases";
 import { Iotprepository } from "@interfaces/repositroey/IOtRepository";
-import { Iuuid } from "@interfaces/services/interface";
+import { IRedisDb, ISocket, Iuuid } from "@interfaces/services/interface";
 import { InodeMailer } from "@interfaces/services/interface";
 import { IHashpassword } from "@interfaces/services/interface";
 import { Itoken } from "@interfaces/services/interface";
 // import { OtpTemplate } from "./ infrastructure/services/maileTamplate";
 import { OtpTemplate, forgetPasswordTemplate } from "../infrastructure/services/maileTamplate";
-import { JwtPayload, ResponseObj } from "@infrastructure/@types/type";
+import { JwtPayload, ResponseObj } from "@infrastructure/types/type";
 import { IreviewRepository } from "@interfaces/repositroey/IreviewRepository";
 
 
@@ -32,6 +32,7 @@ export class StudentUsecase implements IstudenUsecases {
     private token: Itoken;
     private staticFile;
     private reviewRepository: IreviewRepository;
+    private redis:IRedisDb
     constructor(
         studentRepo: IstudentRepository,
         otpRepository: Iotprepository,
@@ -40,7 +41,8 @@ export class StudentUsecase implements IstudenUsecases {
         hashPassword: IHashpassword,
         token: Itoken,
         staticFile,
-        reviewRepository:IreviewRepository
+        reviewRepository:IreviewRepository,
+        redis:IRedisDb
     ) {
         this.otpRepository = otpRepository
         this.studentRepo = studentRepo
@@ -50,6 +52,7 @@ export class StudentUsecase implements IstudenUsecases {
         this.token = token
         this.staticFile = staticFile
         this.reviewRepository = reviewRepository
+        this.redis= redis
     }
 
 
@@ -218,6 +221,7 @@ export class StudentUsecase implements IstudenUsecases {
 
     async getTodyReview({_id}): Promise<ResponseObj> {
         const data = await  this.reviewRepository.findTodayReviewWithStudentId(_id)
+        console.log(data)
         return {data,status:200}
 
     }

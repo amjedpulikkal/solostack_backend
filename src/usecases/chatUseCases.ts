@@ -1,9 +1,9 @@
-import { ResponseObj } from "@infrastructure/@types/type";
+import { ResponseObj } from "@infrastructure/types/type";
 import { IchatGroupUseCase } from "@interfaces/IchatGroupUseCases";
 import { IchatGroupRepository } from "@interfaces/repositroey/IchatGroupRepository";
 import { IchatMessageRepository } from "@interfaces/repositroey/IchatMessageRepository";
 import { IAwsS2, ISharp } from "@interfaces/services/interface";
-import { file } from "@infrastructure/@types/type";
+import { file } from "@infrastructure/types/type";
 
 export class chatGroupUseCases implements IchatGroupUseCase {
   private chatGroupRepo: IchatGroupRepository;

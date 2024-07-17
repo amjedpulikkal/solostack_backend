@@ -1,4 +1,4 @@
-import { DbObjectIdType } from "@infrastructure/@types/mongo";
+import { DbObjectIdType } from "@infrastructure/types/mongo";
 
 export interface IchatGroup {
   _id?:string

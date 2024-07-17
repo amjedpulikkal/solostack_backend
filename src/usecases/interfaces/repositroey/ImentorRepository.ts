@@ -1,4 +1,4 @@
-import { singUpBody } from "../../../infrastructure/@types/reqBodey";
+import { singUpBody } from "../../../infrastructure/types/reqBodey";
 import { Imentor } from "@entities/mentor";
 export interface ImentorRepository {
     ifUserExist(email: string): Promise<boolean>;

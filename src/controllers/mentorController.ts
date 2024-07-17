@@ -1,5 +1,5 @@
 import { ImentorUseCases } from "@interfaces/ImentorUseCases";
-import { req, res, next } from "../infrastructure/@types/serverTypes";
+import { req, res, next } from "../infrastructure/types/serverTypes";
 import { ErrorHandler } from "../infrastructure/server/middlewares/error";
 import { Imentor } from "@entities/mentor";
 
@@ -81,7 +81,6 @@ export default class MentorController {
 
       const user = req.user as Imentor;
 
-      console.log(user);
       const data = await this.mentorUseCases.updateAvailableTime(user, {
         date,
         time,

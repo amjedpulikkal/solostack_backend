@@ -1,14 +1,11 @@
-
-
 {
-    "compilerOptions": {
-      "baseUrl": ".",
-      "paths": {
-        "@interfaces/*": ["./src/usecases/interfaces/*"],
-        "@entities/*": ["./src/entities/*"],
-        "@infrastructure/*": [ "./src/infrastructure/*"],
-      
-      },
-      "esModuleInterop": true 
-    }
+  "compilerOptions": {
+    "baseUrl": ".",
+    "paths": {
+      "@interfaces/*": ["./src/usecases/interfaces/*"],
+      "@entities/*": ["./src/entities/*"],
+      "@infrastructure/*": ["./src/infrastructure/*"]
+    },
+    "esModuleInterop": true 
   }
+}

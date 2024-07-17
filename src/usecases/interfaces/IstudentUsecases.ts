@@ -1,7 +1,7 @@
 
 import Istudent from "../../entities/student"
-import { singUpBody } from "../../infrastructure/@types/reqBodey";
-import { ResponseObj } from "../../infrastructure/@types/type";
+import { singUpBody } from "../../infrastructure/types/reqBodey";
+import { ResponseObj } from "../../infrastructure/types/type";
 export interface IstudenUsecases{
    
     isOauth(token:string):Promise<Istudent|boolean>

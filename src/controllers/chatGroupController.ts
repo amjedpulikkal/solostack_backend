@@ -1,5 +1,5 @@
 import { IchatGroupUseCase } from "@interfaces/IchatGroupUseCases";
-import { req, res, next } from "../infrastructure/@types/serverTypes";
+import { req, res, next } from "../infrastructure/types/serverTypes";
 import { ErrorHandler } from "../infrastructure/server/middlewares/error";
 
 export class chatGroup {

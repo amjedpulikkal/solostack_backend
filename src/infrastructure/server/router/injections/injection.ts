@@ -1,3 +1,5 @@
+
+
 import { studentController } from "../../../../controllers/studentController"
 import { StudentUsecase } from "../../../../usecases/studentUsecases"
 import { OtpRepository } from "../../../mongodb/repository/OtpRepository"
@@ -14,7 +16,6 @@ import { AwsS3 } from "../../../../infrastructure/services/aws/s3"
 import { Sharp } from "../../../../infrastructure/services/imageResize "
 import { ReviewRepository as ReviewTimeRepository  } from "../../../mongodb/repository/reviewTimeRepository"
 import { ReviewRepository  } from "../../../mongodb/repository/reiewRepository"
-
 import { reviewModel as reviewTimeModel  } from "../../../mongodb/model/reviewTimeSchema"
 import { reviewModel  } from "../../../mongodb/model/reviewSchema"
 
@@ -23,6 +24,14 @@ import { chatGroupRepo } from "../../../../infrastructure/mongodb/repository/cha
 import { chatMessageRepository } from "../../../mongodb/repository/chatMessageRepository"
 
 import { chatGroup } from "../../../../controllers/chatGroupController"
+
+import { ISocket } from "@interfaces/services/interface"
+
+import { RedisDb } from "../../../../infrastructure/services/redis";
+// import { emitEventToUser } from "@infrastructure/services/socketIo"
+
+export const connectedUserSockets = new Map<string,ISocket>()
+console.log(connectedUserSockets,"-------")
 
 const studentRepo = new StudentRepository() 
 const uuid = new Uuid()
@@ -35,6 +44,9 @@ const hashPassword = new Encrypt()
 const staticFile = new AwsS3()
 const token = new Token()
 const sharp = new Sharp()
+export const redisDb= new RedisDb()
+
+// emitEventToUser
 const studentUsecase = new StudentUsecase(
     studentRepo,
     otpRepository,
@@ -43,7 +55,8 @@ const studentUsecase = new StudentUsecase(
     hashPassword,
     token,
     staticFile,
-    reviewRepository
+    reviewRepository,
+    redisDb
 )
 
 const mentorRepository = new MentorRepository()
@@ -58,7 +71,8 @@ const mentorUseCases = new MentorUseCases(
     token,
     staticFile,
     sharp,
-    reviewRepository
+    reviewRepository,
+    redisDb
 
 )
 

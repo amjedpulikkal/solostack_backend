@@ -1,6 +1,6 @@
-import { ResponseObj } from "@infrastructure/@types/type"
+import { ResponseObj } from "@infrastructure/types/type"
 
-import { file } from "@infrastructure/@types/type";
+import { file } from "@infrastructure/types/type";
 
 export  interface IchatGroupUseCase{
     getAllChatGroup(): Promise<ResponseObj>

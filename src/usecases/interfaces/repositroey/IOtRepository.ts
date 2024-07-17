@@ -1,7 +1,7 @@
 
 import {IOtp} from "../../../entities/otp"
 
-import { singUpBody } from "@infrastructure/@types/reqBodey";
+import { singUpBody } from "@infrastructure/types/reqBodey";
 export interface Iotprepository {
     
     createNewOtp(otp_n:number,author:{email:string,password?:string,userName?:string}):Promise<IOtp>;

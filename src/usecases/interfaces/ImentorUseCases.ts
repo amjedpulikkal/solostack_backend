@@ -1,7 +1,7 @@
 import { IReview } from "@entities/Ireview";
 import { Imentor } from "@entities/mentor";
-import { singUpBody } from "@infrastructure/@types/reqBodey";
-import { ResponseObj, file } from "@infrastructure/@types/type";
+import { singUpBody } from "@infrastructure/types/reqBodey";
+import { ResponseObj, file } from "@infrastructure/types/type";
 
 export interface ImentorUseCases {
     getAllMentors(date:Date): Promise<ResponseObj>

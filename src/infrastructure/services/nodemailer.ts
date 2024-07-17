@@ -9,7 +9,7 @@ const transport = nodemailer.createTransport({
     }
 });
 
-import { MailPayload } from "../@types/type";
+import { MailPayload } from "../types/type";
 
 export class Nodemailer implements InodeMailer {
     async sendOtpToMail(payload: MailPayload): Promise<boolean|Error>{

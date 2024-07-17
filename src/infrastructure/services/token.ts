@@ -2,7 +2,7 @@ require("dotenv").config();
 import jwt from "jsonwebtoken"
 import Istudent from "../../entities/student";
 // import { JwtPayload } from "jsonwebtoken";
-import { JwtPayload } from "../@types/type";
+import { JwtPayload } from "../types/type";
 const secretKey = process.env.jwtSecret !
 import { Itoken  } from "../../usecases/interfaces/services/interface";
 export class Token implements Itoken{

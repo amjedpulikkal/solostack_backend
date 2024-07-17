@@ -1,16 +1,17 @@
 
-import { dbModel, DbObjectIdType } from "@infrastructure/@types/mongo"
+import { dbModel, DbObjectIdType } from "@infrastructure/types/mongo"
 import { IReview } from "@entities/Ireview"
 
-import { IreviewRepository } from "@interfaces/repositroey/IreviewRepository"
+import { IreviewTimeRepository } from "@interfaces/repositroey/IreviewRepository"
 import { ObjectId } from "../model/mentorSchema"
-export class ReviewRepository implements IreviewRepository {
+export class ReviewRepository implements IreviewTimeRepository {
 
-    private reviewModel: typeof dbModel<IReview>
-    constructor(reviewModel: typeof dbModel<IReview>) {
+    private reviewModel:  typeof dbModel<IReview>;
 
-        this.reviewModel = reviewModel
+    constructor(review:  typeof dbModel<IReview>) {
+      this.reviewModel = review;
     }
+  
 
 
     async createNewReview(date: Date, time: number | number[], mentorId: string): Promise<IReview | IReview[]> {
@@ -26,7 +27,6 @@ export class ReviewRepository implements IreviewRepository {
             });
 
             const results = await Promise.all<IReview>(promises);
-            console.table(results)
             return results;
         }
 
@@ -38,14 +38,14 @@ export class ReviewRepository implements IreviewRepository {
     
     async getAvailableTime(_id: string, date: Date): Promise<IReview[]> {
         console.log(date,"===============",new ObjectId(_id))
-        return await this.reviewModel.find({mentorId: new ObjectId(_id),date:new Date(date)}).populate("requests.studentId") as IReview[]
+        return await this.reviewModel.find({mentorId: new ObjectId(_id),date:new Date(date)}).populate("requests.studentId").populate("bookedId") as IReview[]
 
     }
     async getAllMentorAvailableTime(date: Date,time:number): Promise<IReview[]> {
         console.log(date,"===============",time)
         return await this.reviewModel.find({date:new Date(date),time,isBooked:false}).populate("mentorId") as IReview[]
     }
-    async     getAllMentorsWithDate(date:Date){
+    async  getAllMentorsWithDate(date:Date){
         return await this.reviewModel.find({date:new Date(date)}).populate("mentorId")
     }
 

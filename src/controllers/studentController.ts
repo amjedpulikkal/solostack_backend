@@ -1,6 +1,6 @@
 import Istudent from "../entities/student";
 import { ErrorHandler } from "../infrastructure/server/middlewares/error";
-import { req, res, next } from "../infrastructure/@types/serverTypes";
+import { req, res, next } from "../infrastructure/types/serverTypes";
 import { IstudenUsecases } from "../usecases/interfaces/IstudentUsecases";
 require("dotenv").config();
 interface User {
@@ -229,7 +229,7 @@ export class studentController {
   }
   async getTodyReview(req: req, res: res, next: next) {
     try {
-      const data = await this.studentUsecase.getTodyReview(req.user);
+      const data = await this.studentUsecase.getTodyReview(req.user as {_id:string});
 
       res.status(data.status).json(data.data);
     } catch (error) {

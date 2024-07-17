@@ -1,6 +1,6 @@
 
 import { ErrorHandler } from "@infrastructure/server/middlewares/error";
-import { req, res, next } from "../infrastructure/@types/serverTypes"
+import { req, res, next } from "../infrastructure/types/serverTypes"
 
 
 

@@ -1,5 +1,5 @@
 require("dotenv").config();
-import { MailPayload } from "../@types/type";
+import { MailPayload } from "../types/type";
 
 export function OtpTemplate(userEmail:string, otp:number, name:string|undefined):MailPayload {
     console.log("email");

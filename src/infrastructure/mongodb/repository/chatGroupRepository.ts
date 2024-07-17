@@ -63,6 +63,15 @@ export class chatGroupRepo implements IchatGroupRepository {
       
       },
       {
+        $lookup: {
+          from: "students",
+          localField: "subscripts.subscribers",
+          foreignField: "_id",
+          as: "subscriptsUsers",
+        },
+      
+      },
+      {
         $addFields: {
           "messages.senderData": {
             $arrayElemAt: ["$studentData", 0]

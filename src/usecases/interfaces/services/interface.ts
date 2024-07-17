@@ -1,10 +1,12 @@
 
-import { JwtPayload } from "../../../infrastructure/@types/type"; 
+import { JwtPayload } from "../../../infrastructure/types/type"; 
 import Istudent from "../../../entities/student";
 import Imentor from "../../../entities/mentor";
 import { Profile as GitHubProfile } from 'passport-github2';
 import { Profile as LinkedInProfile } from 'passport-linkedin-oauth2';
 import { Profile as GoogleProfile } from 'passport-google-oauth20';
+import { Socket } from "socket.io";
+import { DefaultEventsMap } from "socket.io/dist/typed-events";
 export interface Iuuid {
     generateOTPFromUUID(): number;
 
@@ -60,4 +62,15 @@ export interface IAwsS2{
 
 export interface ISharp{
     resizeImage(input:Buffer,width:number,hight:number):Promise<Buffer>
+}
+
+export type ISocket=Socket<DefaultEventsMap,DefaultEventsMap,DefaultEventsMap,any>
+
+
+
+export interface IRedisDb {
+    setData(key:string,value:any):Promise<void>
+    getData(key:string):Promise<any>
+    setDataWithEx(key: string, value: any, ttl: number):Promise<void>
+   
 }
