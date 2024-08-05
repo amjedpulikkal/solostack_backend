@@ -1,6 +1,6 @@
 import { JwtPayload } from "../../../infrastructure/types/type";
 import Istudent from "../../../entities/student";
-import Imentor from "../../../entities/mentor";
+import {Imentor} from "../../../entities/mentor";
 import { Profile as GitHubProfile } from "passport-github2";
 import { Profile as LinkedInProfile } from "passport-linkedin-oauth2";
 import { Profile as GoogleProfile } from "passport-google-oauth20";

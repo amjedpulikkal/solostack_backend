@@ -12,7 +12,7 @@ export class adminController {
         this.adminUseCases = adminUseCases
      }
 
-    signUpAdmin(req: req, res: res, next: next) {
+   async signUpAdmin(req: req, res: res, next: next) {
 
         try {
             const { email, password } = req.body

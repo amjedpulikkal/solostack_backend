@@ -1,0 +1,12 @@
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+const express_1 = require("express");
+const injection_1 = require("./injections/injection");
+const multer_1 = require("../middlewares/multer");
+const auth_1 = require("../middlewares/auth");
+const router = (0, express_1.Router)();
+router.route("/").post(multer_1.uploadFileToBuffer, (req, res, next) => injection_1.chatCtrl.createNewGroup(req, res, next)).get((req, res, next) => injection_1.chatCtrl.getAllGroups(req, res, next));
+router.route("/join").post(auth_1.isAuthenticated, (req, res, next) => injection_1.chatCtrl.joinNewGroup(req, res, next));
+router.route("/groups").post((req, res, next) => injection_1.chatCtrl.getAllGroupWithID(req, res, next)).get((req, res, next) => { injection_1.chatCtrl.getAllGroups(req, res, next); });
+router.route("/chat-history").post((req, res, next) => injection_1.chatCtrl.getChatHistory(req, res, next));
+exports.default = router;

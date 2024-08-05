@@ -1,5 +1,5 @@
 import Istudent from "@entities/student";
-import Imentor from "@entities/mentor";
+import {Imentor} from "@entities/mentor";
 
 export type MailPayload = {
     from: string;
@@ -16,12 +16,6 @@ interface User {
     email: string;
     
 
-declare global {
-    namespace Express {
-        interface Request {
-            user?: User; 
-        }
-    }
 }
 
 export type JwtPayload={
@@ -34,7 +28,7 @@ export type JwtPayload={
 export type ResponseObj={
     status:number;
     token?:string
-    data:string | Error | Istudent |Imentor
+    data:any
     
 
 }
