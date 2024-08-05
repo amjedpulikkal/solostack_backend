@@ -154,32 +154,32 @@ export class studentController {
       next(new ErrorHandler());
     }
   }
-  async login(req: req, res: res, next: next) {
-    try {
-      const { email, password } = req.body;
-      console.log(email, password);
+    async login(req: req, res: res, next: next) {
+      try {
+        const { email, password } = req.body;
+        console.log(email, password);
 
-      const data = await this.studentUsecase.login(email, password);
-      console.log("dataRes", data);
+        const data = await this.studentUsecase.login(email, password);
+        console.log("dataRes", data);
 
-      if (data.status === 200)
-        return res
-          .cookie("jwtToken", data?.token, {
-            httpOnly: true,
-            secure: true,
-            sameSite: "strict",
-            maxAge: 604800000,
-            path: "/",
-          })
-          .status(data.status)
-          .json(data.data);
+        if (data.status === 200)
+          return res
+            .cookie("jwtToken", data?.token, {
+              httpOnly: true,
+              secure: true,
+              sameSite: 'none', 
+              maxAge: 604800000,
+              path: "/",
+            })
+            .status(data.status)
+            .json(data.data);
 
-      return res.status(data.status).json(data.data);
-    } catch (error) {
-      console.log(error);
-      next(new ErrorHandler());
+        return res.status(data.status).json(data.data);
+      } catch (error) {
+        console.log(error);
+        next(new ErrorHandler());
+      }
     }
-  }
 
   async forgetPassword(req: req, res: res, next: next) {
     try {

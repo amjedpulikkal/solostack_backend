@@ -57,6 +57,7 @@ import {
   redisDb,
 } from "../server/router/injections/injection";
 import { IchatGroup } from "@entities/IchatGroup";
+import { IRedisDb,  } from "@interfaces/services/interface";
 
 export const server = createServer(app);
 const io = new Server(server, {
@@ -86,7 +87,7 @@ io.on("connection", async (socket) => {
         connectTime: new Date().toISOString(),
       };
 
-     await redisDb.setData(data.userID ,  socketData );
+      await redisDb.setData(data.userID, socketData);
     }
   });
 
@@ -100,45 +101,73 @@ io.on("connection", async (socket) => {
     ChatGroupUseCases.storeMessage(data);
     io.to(data.groupId).emit("receiveData", { data });
   });
-  
-  socket.on("joinVideoCall",async(data:{peerId:string,id:string,author:"student"|"mentor"})=>{
-  console.log(data,"obj")
-  const oldObj = await redisDb.getData(data.id) as {mentor:{id:string,peerId:string},student:{peerId:string,id:string}}
-  console.log(oldObj)
-  if(data.author ==="student"){
-    if(oldObj.mentor.peerId){
-      console.log("to Mentor-------------------------------")
-      emitEventToUser(oldObj.mentor.id,"callUser",{peerId:data.peerId})
-    await redisDb.setData(data.id,{...oldObj,student:{id:oldObj.mentor.id,peerId:data.peerId}})
 
-    }else{
-      console.log("studnet---------")
+  socket.on(
+    "joinVideoCall",
+    async (data: {
+      peerId: string;
+      id: string;
+      author: "student" | "mentor";
+    }) => {
+      console.log(data, "obj");
+      const oldObj = (await redisDb.getData(data.id)) as {
+        mentor: { id: string; peerId: string };
+        student: { peerId: string; id: string };
+      };
+      console.log(oldObj);
+      if (data.author === "student") {
+        if (oldObj.mentor.peerId) {
+          console.log("to Mentor-------------------------------");
+          socketEmitEventToUser(oldObj.mentor.id, "callUser", {
+            peerId: data.peerId,
+          });
+          await redisDb.setData(data.id, {
+            ...oldObj,
+            student: { id: oldObj.mentor.id, peerId: data.peerId },
+          });
+        } else {
+          console.log("studnet---------");
 
-      await redisDb.setData(data.id,{...oldObj,student:{id:oldObj.student.id,peerId:data.peerId}})
+          await redisDb.setData(data.id, {
+            ...oldObj,
+            student: { id: oldObj.student.id, peerId: data.peerId },
+          });
+        }
+      } else {
+        if (oldObj.student.peerId) {
+          console.log("to student-------------------------------");
+          socketEmitEventToUser(oldObj.student.id, "callUser", {
+            peerId: data.peerId,
+          });
+          await redisDb.setData(data.id, {
+            ...oldObj,
+            mentor: { id: oldObj.mentor.id, peerId: data.peerId },
+          });
+        } else {
+          await redisDb.setData(data.id, {
+            ...oldObj,
+            mentor: { id: oldObj.mentor.id, peerId: data.peerId },
+          });
+        }
+      }
+      console.log(oldObj);
     }
-  }else{
-
-  if(oldObj.student.peerId){
-  console.log("to student-------------------------------")
-    emitEventToUser(oldObj.student.id,"callUser",{peerId:data.peerId})
-    await redisDb.setData(data.id,{...oldObj,mentor:{id:oldObj.mentor.id,peerId:data.peerId}})
-  
-  }  else{
-      console.log("mentort---------")
-    await redisDb.setData(data.id,{...oldObj,mentor:{id:oldObj.mentor.id,peerId:data.peerId}})
-
-  }
-
-   }
-  console.log(oldObj)
-  })
+  );
   socket.on("disconnect", (data) => {
-    console.log("A client disconnected",data,socket.id);
-  }); 
-
+    console.log("A client disconnected", data, socket.id);
+  });
 });
 
-async function emitEventToUser (userId: string, eventName: string, eventData: any){
+
+
+
+
+
+export async function socketEmitEventToUser(
+  userId: string,
+  eventName: string,
+  eventData: any
+) {
   try {
     const socketData = await redisDb.getData(userId);
     if (socketData && socketData.id) {
@@ -155,4 +184,4 @@ async function emitEventToUser (userId: string, eventName: string, eventData: an
   } catch (error) {
     console.error(`Error emitting event to user ${userId}:`, error);
   }
-};
+}

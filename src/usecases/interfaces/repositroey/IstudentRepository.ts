@@ -12,5 +12,6 @@ export interface IstudentRepository{
     updatePassword(_id:string,password:string)
     isUserNameExist(userName:string):Promise<Boolean>
     getAllStudents():Promise<Istudent[]> 
+    ingressWallet(userId:string,amount:number):Promise<any>
 }
 

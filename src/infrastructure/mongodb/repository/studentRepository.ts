@@ -76,4 +76,7 @@ export class StudentRepository implements IstudentRepository {
     async getAllStudents():Promise<Istudent[]> {
         return await studentCollection.find({},{password:0})
     }
+    async ingressWallet(userId:string,amount:number):Promise<any>{
+        return await studentCollection.findByIdAndUpdate(userId,{$inc:{wallet:amount}})
+    }
 }

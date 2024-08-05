@@ -4,11 +4,14 @@ import { studentController } from "../../../../controllers/studentController"
 import { StudentUsecase } from "../../../../usecases/studentUsecases"
 import { OtpRepository } from "../../../mongodb/repository/OtpRepository"
 import { OtpModel } from "../../../mongodb/model/otpSchema"
+import paymentHistorySchema from "../../../mongodb/model/paymentHistorySchema"
+
 import { StudentRepository } from "../../../mongodb/repository/studentRepository"
 import { Uuid } from "../../../services/uuid"
 import { Nodemailer } from "../../../services/nodemailer"
 import { Encrypt } from "../../../services/hashPassword"
 import { Token } from "../../../services/token"
+import {StripeServices}from "../../../services/stripe"
 import Mentor from "../../../../controllers/mentorController"
 import { MentorUseCases } from "../../../../usecases/mentorUsecases"
 import { MentorRepository } from "../../../../infrastructure/mongodb/repository/mentorRepository"
@@ -28,8 +31,13 @@ import { chatGroup } from "../../../../controllers/chatGroupController"
 import { ISocket } from "@interfaces/services/interface"
 
 import { RedisDb } from "../../../../infrastructure/services/redis";
+import { StripeUseCases } from "../../../../usecases/stripeUseCases"
+import {StripeController} from "../../../../controllers/stripe"
+import { PaymentHistoryRepository } from "../../../../infrastructure/mongodb/repository/paymentHistoryRepository"
+import { ExchangeRate } from "../../../../infrastructure/services/exchangeRate"
+import { socketEmitEventToUser } from "../../../../infrastructure/services/socketIo"
 // import { emitEventToUser } from "@infrastructure/services/socketIo"
-
+console.log(socketEmitEventToUser)
 export const connectedUserSockets = new Map<string,ISocket>()
 console.log(connectedUserSockets,"-------")
 
@@ -44,9 +52,12 @@ const hashPassword = new Encrypt()
 const staticFile = new AwsS3()
 const token = new Token()
 const sharp = new Sharp()
+const stripeServices =new StripeServices() 
 export const redisDb= new RedisDb()
+const exchangeRate = new ExchangeRate()
+const paymentHistoryRepository = new PaymentHistoryRepository(paymentHistorySchema)
 
-// emitEventToUser
+const stripeUseCases = new StripeUseCases(stripeServices,paymentHistoryRepository,studentRepo,exchangeRate)
 const studentUsecase = new StudentUsecase(
     studentRepo,
     otpRepository,
@@ -72,7 +83,8 @@ const mentorUseCases = new MentorUseCases(
     staticFile,
     sharp,
     reviewRepository,
-    redisDb
+    redisDb,
+    socketEmitEventToUser
 
 )
 
@@ -90,3 +102,5 @@ export const ChatGroupUseCases  = new chatGroupUseCases(
 export const chatCtrl = new chatGroup(ChatGroupUseCases)
 export const mentorCtrl = new Mentor(mentorUseCases)
 export const studentCtrl = new studentController(studentUsecase)
+export const stripeController = new StripeController(stripeUseCases)
+

@@ -1,6 +1,6 @@
 import { singUpBody } from "@infrastructure/types/reqBodey";
 import { Iotprepository } from "@interfaces/repositroey/IOtRepository";
-import { IAwsS2, Iuuid, ISharp, ISocket, IRedisDb } from "@interfaces/services/interface";
+import { IAwsS2, Iuuid, ISharp, IRedisDb, socketEemitEventToUser } from "@interfaces/services/interface";
 import { InodeMailer } from "@interfaces/services/interface";
 import { IHashpassword } from "@interfaces/services/interface";
 import { Itoken } from "@interfaces/services/interface";
@@ -31,6 +31,7 @@ export class MentorUseCases implements ImentorUseCases {
   private reviewTimeRepository: IreviewTimeRepository;
   private reviewRepository: IreviewRepository;
   private  redis:IRedisDb
+  private  socketIo:socketEemitEventToUser
   constructor(
     mentorRepo: ImentorRepository,
     reviewTimeRepo: IreviewTimeRepository,
@@ -42,7 +43,8 @@ export class MentorUseCases implements ImentorUseCases {
     staticFile: IAwsS2,
     sharp: ISharp,
     reviewRepository: IreviewRepository,
-    redis:IRedisDb
+    redis:IRedisDb,
+    socketIo:socketEemitEventToUser
 
   ) {
     this.otpRepository = otpRepository;
@@ -56,6 +58,7 @@ export class MentorUseCases implements ImentorUseCases {
     this.imageResize = sharp;
     this.reviewRepository = reviewRepository;
     this.redis = redis;
+    this.socketIo =  socketIo
   }
 
   async createMentorAccount(mentor: singUpBody): Promise<ResponseObj> {
@@ -164,9 +167,6 @@ export class MentorUseCases implements ImentorUseCases {
       date
     );
 
-    // console.log("data", data)
-    // console.table(data)
-
     return { data, status: 200 };
   }
   async getAllMentorAvailableTime(
@@ -246,6 +246,7 @@ export class MentorUseCases implements ImentorUseCases {
     studentID: string;
   }): Promise<ResponseObj> {
     console.log(studentID);
+
     const reviewCl = await this.reviewRepository.createNewReview(
       reviewTime,
       studentID
@@ -257,13 +258,14 @@ export class MentorUseCases implements ImentorUseCases {
     },student:{peerId:null
       ,id:reviewCl.studentId.toString()
     }})
-    console.log(reviewCl, "-----2---");
+
     const data = await this.reviewTimeRepository.updateReviewTime(
       reviewCl?._id,
       reviewTime._id
     );
 
-    console.log(data);
+    this.socketIo(reviewCl.mentorId.toString(),"newObj",{data:await this.reviewTimeRepository.getAvailableTime(reviewCl.mentorId.toString(),reviewCl.date)})
+  
     return { status: 200, data };
   }
 }

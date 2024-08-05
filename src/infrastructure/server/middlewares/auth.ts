@@ -3,7 +3,7 @@ import { Request, Response, NextFunction } from "express"
 
 
 
-export const isAuthenticated = async (
+export const    isAuthenticated = async (
     req: Request,
     res: Response,
     next: NextFunction
@@ -11,6 +11,7 @@ export const isAuthenticated = async (
     const accessToken = req.cookies.jwtToken as string;
 
 
+    console.log(req.cookies)
     if (!accessToken)
         return res.status(400).json("Access Token is invalid")
 
@@ -18,7 +19,7 @@ export const isAuthenticated = async (
         accessToken,
         process.env.jwtSecret as Secret
     ) as JwtPayload;
-        
+
     if (!decode)
         return res.status(400).json("Access Token is invalid")
     
