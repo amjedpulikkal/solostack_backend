@@ -88,8 +88,8 @@ export class studentController {
       } else {
         res.cookie("jwtToken", token, {
           httpOnly: true,
-          secure: true,
-          sameSite: "strict",
+          // secure: true,
+         sameSite: "lax",
           maxAge: 604800000,
           path: "/",
         });
