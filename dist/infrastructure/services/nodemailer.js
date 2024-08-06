@@ -16,11 +16,13 @@ exports.Nodemailer = void 0;
 require("dotenv").config();
 const nodemailer_1 = __importDefault(require("nodemailer"));
 const transport = nodemailer_1.default.createTransport({
-    service: "gmail",
+    //@ts-ignore
+    host: process.env.SMTP_Server,
+    port: process.env.SMTP_Server_port,
     auth: {
         user: process.env.nodemailerEmail,
-        pass: process.env.nodemailerPassword
-    }
+        pass: process.env.nodemailerPassword,
+    },
 });
 class Nodemailer {
     sendOtpToMail(payload) {

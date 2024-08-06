@@ -7,7 +7,7 @@ function OtpTemplate(userEmail, otp, name) {
     console.log("email");
     console.log(userEmail);
     const mail = {
-        from: "solostack00@gmail.com",
+        from: "contacts@solostack.online",
         to: userEmail,
         subject: "Hello from SoloStack",
         text: "This is a test email sent using Nodemailer.",
