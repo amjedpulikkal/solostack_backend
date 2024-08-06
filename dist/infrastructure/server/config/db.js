@@ -14,16 +14,24 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.dbConnect = dbConnect;
 const mongoose_1 = __importDefault(require("mongoose"));
-require("dotenv").config();
-const db_url = process.env.db || "";
+const dotenv_1 = __importDefault(require("dotenv"));
+dotenv_1.default.config();
+const db_url = process.env.db;
 function dbConnect() {
     return __awaiter(this, void 0, void 0, function* () {
         try {
-            const data = yield mongoose_1.default.connect(db_url, { dbName: "solostack" });
-            console.log(data.connection.host);
+            const options = {
+                dbName: "solostack",
+                writeConcern: {
+                    w: 'majority',
+                    wtimeoutMS: 5000
+                }
+            };
+            const data = yield mongoose_1.default.connect(db_url, options);
+            console.log(`Connected to MongoDB Atlas at ${data.connection.host}`);
         }
         catch (error) {
-            console.log(error);
+            console.error('Failed to connect to MongoDB Atlas:', error);
             setTimeout(dbConnect, 5000);
         }
     });
