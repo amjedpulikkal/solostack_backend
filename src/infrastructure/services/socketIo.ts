@@ -123,11 +123,13 @@ io.on("connection", async (socket) => {
           });
           await redisDb.setData(data.id, {
             ...oldObj,
-            student: { id: oldObj.mentor.id, peerId: data.peerId },
+            student: { id: oldObj.student.id, peerId: data.peerId },
           });
         } else {
           console.log("studnet---------");
-
+          socketEmitEventToUser(oldObj.mentor.id, "userWaiting", {
+            peerId: data.peerId,
+          });
           await redisDb.setData(data.id, {
             ...oldObj,
             student: { id: oldObj.student.id, peerId: data.peerId },
@@ -144,13 +146,16 @@ io.on("connection", async (socket) => {
             mentor: { id: oldObj.mentor.id, peerId: data.peerId },
           });
         } else {
+          socketEmitEventToUser(oldObj.mentor.id, "userWaiting", {
+            peerId: data.peerId,
+          });
           await redisDb.setData(data.id, {
             ...oldObj,
             mentor: { id: oldObj.mentor.id, peerId: data.peerId },
           });
         }
       }
-      console.log(oldObj);
+      console.log(oldObj,"old");
     }
   );
   socket.on("disconnect", (data) => {

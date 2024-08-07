@@ -107,10 +107,13 @@ io.on("connection", (socket) => __awaiter(void 0, void 0, void 0, function* () {
                 socketEmitEventToUser(oldObj.mentor.id, "callUser", {
                     peerId: data.peerId,
                 });
-                yield injection_1.redisDb.setData(data.id, Object.assign(Object.assign({}, oldObj), { student: { id: oldObj.mentor.id, peerId: data.peerId } }));
+                yield injection_1.redisDb.setData(data.id, Object.assign(Object.assign({}, oldObj), { student: { id: oldObj.student.id, peerId: data.peerId } }));
             }
             else {
                 console.log("studnet---------");
+                socketEmitEventToUser(oldObj.mentor.id, "userWaiting", {
+                    peerId: data.peerId,
+                });
                 yield injection_1.redisDb.setData(data.id, Object.assign(Object.assign({}, oldObj), { student: { id: oldObj.student.id, peerId: data.peerId } }));
             }
         }
@@ -123,10 +126,13 @@ io.on("connection", (socket) => __awaiter(void 0, void 0, void 0, function* () {
                 yield injection_1.redisDb.setData(data.id, Object.assign(Object.assign({}, oldObj), { mentor: { id: oldObj.mentor.id, peerId: data.peerId } }));
             }
             else {
+                socketEmitEventToUser(oldObj.mentor.id, "userWaiting", {
+                    peerId: data.peerId,
+                });
                 yield injection_1.redisDb.setData(data.id, Object.assign(Object.assign({}, oldObj), { mentor: { id: oldObj.mentor.id, peerId: data.peerId } }));
             }
         }
-        console.log(oldObj);
+        console.log(oldObj, "old");
     }));
     socket.on("disconnect", (data) => {
         console.log("A client disconnected", data, socket.id);
