@@ -190,4 +190,14 @@ export default class MentorController {
       next(new ErrorHandler());
     }
   }
+  async getTodyReview(req: req, res: res, next: next) {
+    try {
+      const data = await this.mentorUseCases.getTodyReview(req.user as {_id:string});
+
+      res.status(data.status).json(data.data);
+    } catch (error) {
+      console.log(error);
+      next(new ErrorHandler());
+    }
+  }
 }

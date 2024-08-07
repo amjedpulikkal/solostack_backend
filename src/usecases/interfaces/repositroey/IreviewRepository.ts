@@ -21,7 +21,7 @@ export interface IreviewTimeRepository{
 export interface IreviewRepository{
     createNewReview(reviewTime:IReview,studentId:string):Promise<IReviews>
     findTodayReviewWithStudentId(id:string):Promise<IReviews>
-    
+    findTodayReviewWithMentorId(id:string):Promise<IReviews>
     // createNewReview(date: Date, time: number|number[], mentorId: string):Promise<IReview | IReview[]>
     // getAvailableTime(_id:string, date:Date,):Promise<IReview[]>
     // getAllMentorAvailableTime( date: Date,time:number): Promise<IReview[]>

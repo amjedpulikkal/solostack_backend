@@ -33,5 +33,11 @@ class ReviewRepository {
             return data[data.length - 1];
         });
     }
+    findTodayReviewWithMentorId(id) {
+        return __awaiter(this, void 0, void 0, function* () {
+            const data = yield this.reviewModel.find({ mentorId: new mongo_1.ObjectId(id), status: "pending", date: new Date((new Date()).toDateString()) }).populate("studentId");
+            return data[data.length - 1];
+        });
+    }
 }
 exports.ReviewRepository = ReviewRepository;

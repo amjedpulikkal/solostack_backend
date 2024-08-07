@@ -201,5 +201,17 @@ class MentorController {
             }
         });
     }
+    getTodyReview(req, res, next) {
+        return __awaiter(this, void 0, void 0, function* () {
+            try {
+                const data = yield this.mentorUseCases.getTodyReview(req.user);
+                res.status(data.status).json(data.data);
+            }
+            catch (error) {
+                console.log(error);
+                next(new error_1.ErrorHandler());
+            }
+        });
+    }
 }
 exports.default = MentorController;

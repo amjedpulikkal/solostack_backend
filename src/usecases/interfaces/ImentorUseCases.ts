@@ -15,5 +15,6 @@ export interface ImentorUseCases {
     updateProfilePhoto(mentor: Imentor, file: file): Promise<ResponseObj>
     storeRequest({data,mentorRVId,user}): Promise<ResponseObj> 
     searchMentor():Promise<ResponseObj>
-    acceptRequest({reviewTime,studentID}:{reviewTime:IReview,studentID:string}): Promise<ResponseObj>
+    acceptRequest({reviewTime,studentID}:{reviewTime:IReview,studentID:string}): Promise<ResponseObj>,
+    getTodyReview({_id}): Promise<ResponseObj>
 }

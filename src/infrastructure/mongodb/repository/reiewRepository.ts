@@ -28,4 +28,10 @@ export class ReviewRepository implements IreviewRepository {
 
     return data[data.length-1] as IReviews
   }
+  async findTodayReviewWithMentorId(id:string):Promise<IReviews>{
+
+    const data = await this.reviewModel.find({mentorId:new ObjectId(id),status:"pending",date:new Date((new Date()).toDateString())}).populate("studentId")
+
+    return data[data.length-1] as IReviews
+  }
 }

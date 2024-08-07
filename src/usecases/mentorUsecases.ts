@@ -268,4 +268,11 @@ export class MentorUseCases implements ImentorUseCases {
   
     return { status: 200, data };
   }
+
+  async getTodyReview({_id}): Promise<ResponseObj> {
+    const data = await  this.reviewRepository.findTodayReviewWithMentorId(_id)
+    console.log(data)
+    return {data,status:200}
+
+}
 }

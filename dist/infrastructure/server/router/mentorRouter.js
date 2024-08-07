@@ -17,4 +17,5 @@ router.put("/update-image", auth_1.isAuthenticated, multer_1.uploadFileToBuffer,
 router.put("/student/storeRequest", auth_1.isAuthenticated, (req, res, next) => { injection_1.mentorCtrl.storeRequest(req, res, next); });
 router.get("/searchMentor", (req, res, next) => injection_1.mentorCtrl.searchMentor(req, res, next));
 router.post("/student/acceptRequest", auth_1.isAuthenticated, (req, res, next) => injection_1.mentorCtrl.acceptRequest(req, res, next));
+router.get("/getTodyReview", auth_1.isAuthenticated, (req, res, next) => { injection_1.mentorCtrl.getTodyReview(req, res, next); });
 exports.default = router;

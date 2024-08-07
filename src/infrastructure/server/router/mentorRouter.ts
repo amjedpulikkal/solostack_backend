@@ -23,5 +23,8 @@ router.get("/searchMentor",(req,res,next)=>mentorCtrl.searchMentor(req,res,next)
 router.post("/student/acceptRequest",isAuthenticated,(req,res,next)=>mentorCtrl.acceptRequest(req,res,next))
 
 
+router.get("/getTodyReview",isAuthenticated,(req,res,next)=>{mentorCtrl.getTodyReview(req,res,next)})
+
+
 export default router
 

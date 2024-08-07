@@ -182,5 +182,12 @@ class MentorUseCases {
             return { status: 200, data };
         });
     }
+    getTodyReview(_a) {
+        return __awaiter(this, arguments, void 0, function* ({ _id }) {
+            const data = yield this.reviewRepository.findTodayReviewWithMentorId(_id);
+            console.log(data);
+            return { data, status: 200 };
+        });
+    }
 }
 exports.MentorUseCases = MentorUseCases;
