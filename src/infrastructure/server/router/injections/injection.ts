@@ -36,6 +36,7 @@ import {StripeController} from "../../../../controllers/stripe"
 import { PaymentHistoryRepository } from "../../../../infrastructure/mongodb/repository/paymentHistoryRepository"
 import { ExchangeRate } from "../../../../infrastructure/services/exchangeRate"
 import { socketEmitEventToUser } from "../../../../infrastructure/services/socketIo"
+import { TurnStunServer } from "../../../../infrastructure/services/turnAndStun"
 // import { emitEventToUser } from "@infrastructure/services/socketIo"
 console.log(socketEmitEventToUser)
 export const connectedUserSockets = new Map<string,ISocket>()
@@ -53,11 +54,14 @@ const staticFile = new AwsS3()
 const token = new Token()
 const sharp = new Sharp()
 const stripeServices =new StripeServices() 
+
+const turnStunServer = new TurnStunServer()
+
 export const redisDb= new RedisDb()
 const exchangeRate = new ExchangeRate()
 const paymentHistoryRepository = new PaymentHistoryRepository(paymentHistorySchema)
 
-const stripeUseCases = new StripeUseCases(stripeServices,paymentHistoryRepository,studentRepo,exchangeRate)
+const stripeUseCases = new StripeUseCases(stripeServices,paymentHistoryRepository,studentRepo,exchangeRate,turnStunServer)
 const studentUsecase = new StudentUsecase(
     studentRepo,
     otpRepository,

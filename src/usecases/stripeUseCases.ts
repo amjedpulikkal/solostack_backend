@@ -2,23 +2,30 @@ import { ResponseObj } from "@infrastructure/types/type";
 import { IstripeUseCases } from "@interfaces/IstripeUseCases";
 import { IPaymentHistoryRepository } from "@interfaces/repositroey/IpaymentHistoryRepository";
 import { IstudentRepository } from "@interfaces/repositroey/IstudentRepository";
-import { ExchangeRate, StripeServices } from "@interfaces/services/interface";
+import {
+  ExchangeRate,
+  StripeServices,
+  TurnStunServer,
+} from "@interfaces/services/interface";
 
 export class StripeUseCases implements IstripeUseCases {
   private stripe: StripeServices;
   private paymentHistory: IPaymentHistoryRepository;
   private studentRepo: IstudentRepository;
   private exchangeRate: ExchangeRate;
+  private turnStunServer: TurnStunServer;
   constructor(
     stripe: StripeServices,
     paymentHistory: IPaymentHistoryRepository,
     studentRepo: IstudentRepository,
-    exchangeRate: ExchangeRate
+    exchangeRate: ExchangeRate,
+    turnStunServer: TurnStunServer
   ) {
     this.stripe = stripe;
     this.paymentHistory = paymentHistory;
     this.exchangeRate = exchangeRate;
     this.studentRepo = studentRepo;
+    this.turnStunServer = turnStunServer;
   }
 
   async createPaymentIntent({
@@ -96,7 +103,7 @@ export class StripeUseCases implements IstripeUseCases {
     return { data: null, status: 200 };
   }
 
-  async isSucceeded({ stripePaymentIntentId }):Promise<ResponseObj> {
+  async isSucceeded({ stripePaymentIntentId }): Promise<ResponseObj> {
     const isSucceeded = await this.paymentHistory.isSucceeded(
       stripePaymentIntentId
     );
@@ -106,5 +113,9 @@ export class StripeUseCases implements IstripeUseCases {
     } else {
       return { data: isSucceeded, status: 404 };
     }
+  }
+  async turn_and_stun_server(): Promise<ResponseObj> {
+    const data = await this.turnStunServer.getIceServer();
+    return { status: 200, data };
   }
 }
