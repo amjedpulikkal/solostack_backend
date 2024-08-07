@@ -4,6 +4,7 @@ const { sendNotification } = require('web-push');
 
 const pushQueue = new Queue('push-notifications', 'redis://127.0.0.1:6379');
 
+
 pushQueue.process(async (job) => {
   const { subscription, payload } = job.data;
 
