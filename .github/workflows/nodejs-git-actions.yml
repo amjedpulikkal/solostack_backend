@@ -1,0 +1,22 @@
+name: Backend Auto-Update
+
+on:
+  push:
+    branches: [ main ]
+
+jobs:
+  update-and-restart:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Execute remote ssh commands
+      uses: appleboy/ssh-action@master
+      with:
+        host: ${{ secrets.SERVER_IP }}
+        username: ${{ secrets.SERVER_USER }}
+        key: ${{ secrets.SSH_PRIVATE_KEY }}
+        script: |
+          cd ~/solostack_backend/
+          git pull
+          npm install
+          pm2 restart 0
