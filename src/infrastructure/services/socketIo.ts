@@ -149,6 +149,7 @@ io.on("connection", async (socket) => {
           socketEmitEventToUser(oldObj.mentor.id, "userWaiting", {
             peerId: data.peerId,
           });
+          
           await redisDb.setData(data.id, {
             ...oldObj,
             mentor: { id: oldObj.mentor.id, peerId: data.peerId },
