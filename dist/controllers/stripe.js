@@ -10,6 +10,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.StripeController = void 0;
+const error_1 = require("../infrastructure/server/middlewares/error");
 class StripeController {
     constructor(stripeUseCases) {
         this.stripeUseCases = stripeUseCases;
@@ -33,6 +34,19 @@ class StripeController {
             const data = yield this.stripeUseCases.isSucceeded(req.body);
             console.log(data);
             res.status(data.status).json(data);
+        });
+    }
+    turn_and_stun_server(req, res, next) {
+        return __awaiter(this, void 0, void 0, function* () {
+            try {
+                const data = yield this.stripeUseCases.turn_and_stun_server();
+                // console.log(data);
+                res.status(data.status).json(data);
+            }
+            catch (error) {
+                console.log(error);
+                next(new error_1.ErrorHandler());
+            }
         });
     }
 }

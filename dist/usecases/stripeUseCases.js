@@ -11,11 +11,12 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.StripeUseCases = void 0;
 class StripeUseCases {
-    constructor(stripe, paymentHistory, studentRepo, exchangeRate) {
+    constructor(stripe, paymentHistory, studentRepo, exchangeRate, turnStunServer) {
         this.stripe = stripe;
         this.paymentHistory = paymentHistory;
         this.exchangeRate = exchangeRate;
         this.studentRepo = studentRepo;
+        this.turnStunServer = turnStunServer;
     }
     createPaymentIntent(_a) {
         return __awaiter(this, arguments, void 0, function* ({ amount, type = "usd", _id, }) {
@@ -79,6 +80,12 @@ class StripeUseCases {
             else {
                 return { data: isSucceeded, status: 404 };
             }
+        });
+    }
+    turn_and_stun_server() {
+        return __awaiter(this, void 0, void 0, function* () {
+            const data = yield this.turnStunServer.getIceServer();
+            return { status: 200, data };
         });
     }
 }
