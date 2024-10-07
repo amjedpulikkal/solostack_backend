@@ -1,21 +1,19 @@
-import { createClient } from 'redis';
+import { createClient } from "redis";
 
 const client = createClient({
-  url: 'redis://localhost:6379' 
+  url: "redis://localhost:6379",
 });
 
-export const connectReds = () => {
-  client.connect();
-}
+export const connectReds = async () => {
+  await client.connect();
+};
 
-client.on('connect', () => {
-  console.log('Connected to Redis');
+client.on("connect", () => {
+  console.log("Connected to Redis");
 });
 
-client.on('error', (err) => {
-  console.error('Redis error:', err);
+client.on("error", (err) => {
+  console.error("Redis error:", err);
 });
 
 export const redisDb = client;
-
-

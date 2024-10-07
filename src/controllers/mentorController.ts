@@ -18,9 +18,8 @@ export default class MentorController {
 
       return res.status(data.status).json(data.data);
     } catch (error) {
-      console.log(error);
-
-      next(new ErrorHandler());
+    
+      next(new ErrorHandler(error));
     }
   }
   async verifyStudentAccount(req: req, res: res, next: next) {
@@ -43,9 +42,8 @@ export default class MentorController {
       }
       return res.status(data.status).json(data.data);
     } catch (error) {
-      console.log(error);
-
-      next(new ErrorHandler());
+    
+      next(new ErrorHandler(error));
     }
   }
   async login(req: req, res: res, next: next) {
@@ -70,8 +68,7 @@ export default class MentorController {
 
       return res.status(data.status).json(data.data);
     } catch (error) {
-      console.log(error);
-      next(new ErrorHandler());
+          next(new ErrorHandler(error));
     }
   }
 
@@ -88,8 +85,7 @@ export default class MentorController {
 
       res.status(data.status).json(data.data);
     } catch (error) {
-      console.log(error);
-      next(new ErrorHandler());
+          next(new ErrorHandler(error));
     }
   }
 
@@ -105,7 +101,7 @@ export default class MentorController {
       res.status(data.status).json(data.data);
     } catch (error) {
       console.error(error);
-      next(new ErrorHandler());
+      next(new ErrorHandler(error));
     }
   }
 
@@ -119,8 +115,7 @@ export default class MentorController {
       // console.log(date, data)
       res.status(data.status).json(data.data);
     } catch (error) {
-      console.log(error);
-      next(new ErrorHandler());
+          next(new ErrorHandler(error));
     }
   }
 
@@ -130,8 +125,7 @@ export default class MentorController {
       const data = await this.mentorUseCases.getAllMentors(date);
       res.status(data.status).json(data.data);
     } catch (error) {
-      console.log(error);
-      next(new ErrorHandler());
+          next(new ErrorHandler(error));
     }
   }
   async getMentorProfile(req: req, res: res, next: next) {
@@ -141,8 +135,7 @@ export default class MentorController {
       const data = await this.mentorUseCases.getMentorProfile(userName);
       res.status(data.status).json(data.data);
     } catch (error) {
-      console.log(error);
-      next(new ErrorHandler());
+          next(new ErrorHandler(error));
     }
   }
 
@@ -153,8 +146,7 @@ export default class MentorController {
       const data = await this.mentorUseCases.updateProfilePhoto(user, req.file);
       res.status(data.status).json(data.data);
     } catch (error) {
-      console.log(error);
-      next(new ErrorHandler());
+          next(new ErrorHandler(error));
     }
   }
 
@@ -168,16 +160,14 @@ export default class MentorController {
       });
       res.status(data.status).json(data.data);
     } catch (error) {
-      console.log(error);
-      next(new ErrorHandler());
+          next(new ErrorHandler(error));
     }
   }
 
   async searchMentor(req: req, res: res, next: next) {
     try {
     } catch (error) {
-      console.log(error);
-      next(new ErrorHandler());
+          next(new ErrorHandler(error));
     }
   }
 
@@ -186,8 +176,7 @@ export default class MentorController {
       const data = await this.mentorUseCases.acceptRequest(req.body);
       res.status(data.status).json(data.data);
     } catch (error) {
-      console.log(error);
-      next(new ErrorHandler());
+          next(new ErrorHandler(error));
     }
   }
   async getTodyReview(req: req, res: res, next: next) {
@@ -196,8 +185,7 @@ export default class MentorController {
 
       res.status(data.status).json(data.data);
     } catch (error) {
-      console.log(error);
-      next(new ErrorHandler());
+          next(new ErrorHandler(error));
     }
   }
 }

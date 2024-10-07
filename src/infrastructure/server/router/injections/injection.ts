@@ -37,10 +37,10 @@ import { PaymentHistoryRepository } from "../../../../infrastructure/mongodb/rep
 import { ExchangeRate } from "../../../../infrastructure/services/exchangeRate"
 import { socketEmitEventToUser } from "../../../../infrastructure/services/socketIo"
 import { TurnStunServer } from "../../../../infrastructure/services/turnAndStun"
+import { Logger } from "../../../../infrastructure/services/logger"
 // import { emitEventToUser } from "@infrastructure/services/socketIo"
 console.log(socketEmitEventToUser)
-export const connectedUserSockets = new Map<string,ISocket>()
-console.log(connectedUserSockets,"-------")
+
 
 const studentRepo = new StudentRepository() 
 const uuid = new Uuid()
@@ -48,7 +48,7 @@ const otpRepository = new OtpRepository(OtpModel)
 const reviewTimeRepository =new ReviewTimeRepository(reviewTimeModel)
 
 const reviewRepository  = new ReviewRepository(reviewModel)
-const nodemailer = new Nodemailer()
+export const nodemailer = new Nodemailer()
 const hashPassword = new Encrypt()
 const staticFile = new AwsS3()
 const token = new Token()
@@ -57,6 +57,7 @@ const stripeServices =new StripeServices()
 
 const turnStunServer = new TurnStunServer()
 
+export const logger = new Logger()
 export const redisDb= new RedisDb()
 const exchangeRate = new ExchangeRate()
 const paymentHistoryRepository = new PaymentHistoryRepository(paymentHistorySchema)

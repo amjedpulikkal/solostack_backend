@@ -12,6 +12,8 @@ import groupChatRouter from "../router/chatRouter"
 import stripeRouter from "../router/stripeRouter"
 import session from 'express-session'
 import passport from 'passport'
+import { router } from 'bull-board'
+
 const app: Express = express()
 app.use(session({
     secret: 'your-secret-key',
@@ -40,4 +42,7 @@ app.use('/api/v1/student', studentRouter)
 app.use('/api/v1/mentor', mentorRouter)
 app.use('/api/v1/group-chat',groupChatRouter)
 app.use("/",stripeRouter)
+app.use('/admin/queues', router);
+
+
 export default app

@@ -33,7 +33,7 @@ export class adminController {
 
         } catch (error) {
             console.log(error);
-            next(new ErrorHandler())
+            next(new ErrorHandler(error))
 
         }
     }

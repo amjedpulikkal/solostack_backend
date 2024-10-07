@@ -70,9 +70,8 @@ export class studentController {
 
       if (data === 409) return res.status(409).json("Email already used");
     } catch (error) {
-      console.log(error);
 
-      next(new ErrorHandler());
+      next(new ErrorHandler(error));
     }
   }
 
@@ -97,9 +96,9 @@ export class studentController {
         res.status(201).json(token);
       }
     } catch (error) {
-      console.log(error);
+   
 
-      next(new ErrorHandler());
+      next(new ErrorHandler(error));
     }
   }
 
@@ -116,8 +115,8 @@ export class studentController {
         }/${token}`
       );
     } catch (error) {
-      console.log(error);
-      next(new ErrorHandler());
+   
+      next(new ErrorHandler(error));
     }
   }
 
@@ -132,8 +131,8 @@ export class studentController {
 
       return res.status(401).json(statusCodes[401]);
     } catch (error) {
-      console.log(error);
-      next(new ErrorHandler());
+   
+      next(new ErrorHandler(error));
     }
   }
 
@@ -150,8 +149,8 @@ export class studentController {
       });
       // return res.redirect('/');
     } catch (error) {
-      console.log(error);
-      next(new ErrorHandler());
+   
+      next(new ErrorHandler(error));
     }
   }
     async login(req: req, res: res, next: next) {
@@ -176,8 +175,8 @@ export class studentController {
 
         return res.status(data.status).json(data.data);
       } catch (error) {
-        console.log(error);
-        next(new ErrorHandler());
+     
+        next(new ErrorHandler(error));
       }
     }
 
@@ -191,8 +190,8 @@ export class studentController {
 
       res.status(data.status).json(data.data);
     } catch (error) {
-      console.log(error);
-      next(new ErrorHandler());
+   
+      next(new ErrorHandler(error));
     }
   }
   async verifyForgetPassword(req: req, res: res, next: next) {
@@ -204,8 +203,8 @@ export class studentController {
       );
       res.status(data.status).json(data.data);
     } catch (error) {
-      console.log(error);
-      next(new ErrorHandler());
+   
+      next(new ErrorHandler(error));
     }
   }
   async isUserNameExist(req: req, res: res, next: next) {
@@ -214,8 +213,8 @@ export class studentController {
       const data = await this.studentUsecase.isUserNameExist(userName);
       res.status(data.status).json(data.data);
     } catch (error) {
-      console.log(error);
-      next(new ErrorHandler());
+   
+      next(new ErrorHandler(error));
     }
   }
   async searchStudent(req: req, res: res, next: next) {
@@ -223,8 +222,8 @@ export class studentController {
       const data = await this.studentUsecase.searchStudent();
       res.status(data.status).json(data.data);
     } catch (error) {
-      console.log(error);
-      next(new ErrorHandler());
+   
+      next(new ErrorHandler(error));
     }
   }
   async getTodyReview(req: req, res: res, next: next) {
@@ -233,8 +232,8 @@ export class studentController {
 
       res.status(data.status).json(data.data);
     } catch (error) {
-      console.log(error);
-      next(new ErrorHandler());
+   
+      next(new ErrorHandler(error));
     }
   }
 }

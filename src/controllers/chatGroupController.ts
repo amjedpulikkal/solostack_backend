@@ -17,7 +17,6 @@ export class chatGroup {
       return res.status(data.status).json(data);
     } catch (error) {
       console.log(error, "----------------");
-
       next(new ErrorHandler(error));
     }
   }

@@ -97,6 +97,11 @@ export type socketEemitEventToUser = (
 export interface TurnStunServer {
   getIceServer(): Promise<AxiosResponse<any, any>>;
 }
+
+export interface Logger {
+  logDebug(error: string): void;
+}
+
 // export interface ISocketIo{
 //   socketEmitEventToUser(userId: string, eventName: string, eventData: any): Promise<void>
 // }

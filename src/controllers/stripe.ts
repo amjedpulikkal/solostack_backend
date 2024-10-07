@@ -8,24 +8,38 @@ export class StripeController {
     this.stripeUseCases = stripeUseCases;
   }
   async webHock(req: req, res: res, next: next) {
-    const data = await this.stripeUseCases.webhooks(req.body, req);
-    res.status(data.status).json(data);
+    try {
+      const data = await this.stripeUseCases.webhooks(req.body, req);
+      res.status(data.status).json(data);
+    } catch (error) {
+     
+      next(new ErrorHandler(error));
+    }
   }
 
   async createPaymentIntent(req: req, res: res, next: next) {
-    console.log(req.body);
-    const data = await this.stripeUseCases.createPaymentIntent({
-      ...req.body,
-      ...req.user,
-    });
-    console.log(data);
-    res.status(data.status).json(data);
+    try {
+      console.log(req.body);
+      const data = await this.stripeUseCases.createPaymentIntent({
+        ...req.body,
+        ...req.user,
+      });
+      console.log(data);
+      res.status(data.status).json(data);
+    } catch (error) {
+      next(new ErrorHandler(error));
+    }
   }
 
   async isSucceeded(req: req, res: res, next: next) {
-    const data = await this.stripeUseCases.isSucceeded(req.body);
-    console.log(data);
-    res.status(data.status).json(data);
+    try {
+      const data = await this.stripeUseCases.isSucceeded(req.body);
+      console.log(data);
+      res.status(data.status).json(data);
+    } catch (error) {
+     
+      next(new ErrorHandler(error));
+    }
   }
 
   async turn_and_stun_server(req: req, res: res, next: next) {
@@ -34,8 +48,8 @@ export class StripeController {
       // console.log(data);
       res.status(data.status).json(data);
     } catch (error) {
-      console.log(error);
-      next(new ErrorHandler());
+     
+      next(new ErrorHandler(error));
     }
   }
 }
