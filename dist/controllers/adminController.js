@@ -33,7 +33,7 @@ class adminController {
             }
             catch (error) {
                 console.log(error);
-                next(new error_1.ErrorHandler());
+                next(new error_1.ErrorHandler(error));
             }
         });
     }

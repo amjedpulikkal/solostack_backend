@@ -9,7 +9,8 @@
       "@entities/*": ["./src/entities/*"],
       "@infrastructure/*": ["./src/infrastructure/*"]
     },
-    "esModuleInterop": true 
+    "esModuleInterop": true,
+    "skipLibCheck": true  
   },
   "include": ["src/**/*"],
   "exclude": ["node_modules"]

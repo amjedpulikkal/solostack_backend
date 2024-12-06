@@ -22,8 +22,7 @@ class MentorController {
                 return res.status(data.status).json(data.data);
             }
             catch (error) {
-                console.log(error);
-                next(new error_1.ErrorHandler());
+                next(new error_1.ErrorHandler(error));
             }
         });
     }
@@ -47,8 +46,7 @@ class MentorController {
                 return res.status(data.status).json(data.data);
             }
             catch (error) {
-                console.log(error);
-                next(new error_1.ErrorHandler());
+                next(new error_1.ErrorHandler(error));
             }
         });
     }
@@ -73,8 +71,7 @@ class MentorController {
                 return res.status(data.status).json(data.data);
             }
             catch (error) {
-                console.log(error);
-                next(new error_1.ErrorHandler());
+                next(new error_1.ErrorHandler(error));
             }
         });
     }
@@ -90,8 +87,7 @@ class MentorController {
                 res.status(data.status).json(data.data);
             }
             catch (error) {
-                console.log(error);
-                next(new error_1.ErrorHandler());
+                next(new error_1.ErrorHandler(error));
             }
         });
     }
@@ -105,7 +101,7 @@ class MentorController {
             }
             catch (error) {
                 console.error(error);
-                next(new error_1.ErrorHandler());
+                next(new error_1.ErrorHandler(error));
             }
         });
     }
@@ -120,8 +116,7 @@ class MentorController {
                 res.status(data.status).json(data.data);
             }
             catch (error) {
-                console.log(error);
-                next(new error_1.ErrorHandler());
+                next(new error_1.ErrorHandler(error));
             }
         });
     }
@@ -133,8 +128,7 @@ class MentorController {
                 res.status(data.status).json(data.data);
             }
             catch (error) {
-                console.log(error);
-                next(new error_1.ErrorHandler());
+                next(new error_1.ErrorHandler(error));
             }
         });
     }
@@ -147,8 +141,7 @@ class MentorController {
                 res.status(data.status).json(data.data);
             }
             catch (error) {
-                console.log(error);
-                next(new error_1.ErrorHandler());
+                next(new error_1.ErrorHandler(error));
             }
         });
     }
@@ -161,8 +154,7 @@ class MentorController {
                 res.status(data.status).json(data.data);
             }
             catch (error) {
-                console.log(error);
-                next(new error_1.ErrorHandler());
+                next(new error_1.ErrorHandler(error));
             }
         });
     }
@@ -174,8 +166,7 @@ class MentorController {
                 res.status(data.status).json(data.data);
             }
             catch (error) {
-                console.log(error);
-                next(new error_1.ErrorHandler());
+                next(new error_1.ErrorHandler(error));
             }
         });
     }
@@ -184,8 +175,7 @@ class MentorController {
             try {
             }
             catch (error) {
-                console.log(error);
-                next(new error_1.ErrorHandler());
+                next(new error_1.ErrorHandler(error));
             }
         });
     }
@@ -196,8 +186,7 @@ class MentorController {
                 res.status(data.status).json(data.data);
             }
             catch (error) {
-                console.log(error);
-                next(new error_1.ErrorHandler());
+                next(new error_1.ErrorHandler(error));
             }
         });
     }
@@ -208,8 +197,7 @@ class MentorController {
                 res.status(data.status).json(data.data);
             }
             catch (error) {
-                console.log(error);
-                next(new error_1.ErrorHandler());
+                next(new error_1.ErrorHandler(error));
             }
         });
     }

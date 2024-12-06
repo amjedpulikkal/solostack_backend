@@ -16,6 +16,7 @@ const chatRouter_1 = __importDefault(require("../router/chatRouter"));
 const stripeRouter_1 = __importDefault(require("../router/stripeRouter"));
 const express_session_1 = __importDefault(require("express-session"));
 const passport_1 = __importDefault(require("passport"));
+const bull_board_1 = require("bull-board");
 const app = (0, express_1.default)();
 app.use((0, express_session_1.default)({
     secret: 'your-secret-key',
@@ -44,4 +45,5 @@ app.use('/api/v1/student', studentRouter_1.default);
 app.use('/api/v1/mentor', mentorRouter_1.default);
 app.use('/api/v1/group-chat', chatRouter_1.default);
 app.use("/", stripeRouter_1.default);
+app.use('/admin/queues', bull_board_1.router);
 exports.default = app;

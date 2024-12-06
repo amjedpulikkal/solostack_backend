@@ -17,23 +17,38 @@ class StripeController {
     }
     webHock(req, res, next) {
         return __awaiter(this, void 0, void 0, function* () {
-            const data = yield this.stripeUseCases.webhooks(req.body, req);
-            res.status(data.status).json(data);
+            try {
+                const data = yield this.stripeUseCases.webhooks(req.body, req);
+                res.status(data.status).json(data);
+            }
+            catch (error) {
+                next(new error_1.ErrorHandler(error));
+            }
         });
     }
     createPaymentIntent(req, res, next) {
         return __awaiter(this, void 0, void 0, function* () {
-            console.log(req.body);
-            const data = yield this.stripeUseCases.createPaymentIntent(Object.assign(Object.assign({}, req.body), req.user));
-            console.log(data);
-            res.status(data.status).json(data);
+            try {
+                console.log(req.body);
+                const data = yield this.stripeUseCases.createPaymentIntent(Object.assign(Object.assign({}, req.body), req.user));
+                console.log(data);
+                res.status(data.status).json(data);
+            }
+            catch (error) {
+                next(new error_1.ErrorHandler(error));
+            }
         });
     }
     isSucceeded(req, res, next) {
         return __awaiter(this, void 0, void 0, function* () {
-            const data = yield this.stripeUseCases.isSucceeded(req.body);
-            console.log(data);
-            res.status(data.status).json(data);
+            try {
+                const data = yield this.stripeUseCases.isSucceeded(req.body);
+                console.log(data);
+                res.status(data.status).json(data);
+            }
+            catch (error) {
+                next(new error_1.ErrorHandler(error));
+            }
         });
     }
     turn_and_stun_server(req, res, next) {
@@ -44,8 +59,7 @@ class StripeController {
                 res.status(data.status).json(data);
             }
             catch (error) {
-                console.log(error);
-                next(new error_1.ErrorHandler());
+                next(new error_1.ErrorHandler(error));
             }
         });
     }

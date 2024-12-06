@@ -70,8 +70,7 @@ class studentController {
                     return res.status(409).json("Email already used");
             }
             catch (error) {
-                console.log(error);
-                next(new error_1.ErrorHandler());
+                next(new error_1.ErrorHandler(error));
             }
         });
     }
@@ -97,8 +96,7 @@ class studentController {
                 }
             }
             catch (error) {
-                console.log(error);
-                next(new error_1.ErrorHandler());
+                next(new error_1.ErrorHandler(error));
             }
         });
     }
@@ -113,8 +111,7 @@ class studentController {
                 res.redirect(`${process.env.CLIENT_SERVER}/oauth/${(_a = req.user) === null || _a === void 0 ? void 0 : _a.provider}/${token}`);
             }
             catch (error) {
-                console.log(error);
-                next(new error_1.ErrorHandler());
+                next(new error_1.ErrorHandler(error));
             }
         });
     }
@@ -130,8 +127,7 @@ class studentController {
                 return res.status(401).json(statusCodes[401]);
             }
             catch (error) {
-                console.log(error);
-                next(new error_1.ErrorHandler());
+                next(new error_1.ErrorHandler(error));
             }
         });
     }
@@ -151,8 +147,7 @@ class studentController {
                 // return res.redirect('/');
             }
             catch (error) {
-                console.log(error);
-                next(new error_1.ErrorHandler());
+                next(new error_1.ErrorHandler(error));
             }
         });
     }
@@ -177,8 +172,7 @@ class studentController {
                 return res.status(data.status).json(data.data);
             }
             catch (error) {
-                console.log(error);
-                next(new error_1.ErrorHandler());
+                next(new error_1.ErrorHandler(error));
             }
         });
     }
@@ -191,8 +185,7 @@ class studentController {
                 res.status(data.status).json(data.data);
             }
             catch (error) {
-                console.log(error);
-                next(new error_1.ErrorHandler());
+                next(new error_1.ErrorHandler(error));
             }
         });
     }
@@ -204,8 +197,7 @@ class studentController {
                 res.status(data.status).json(data.data);
             }
             catch (error) {
-                console.log(error);
-                next(new error_1.ErrorHandler());
+                next(new error_1.ErrorHandler(error));
             }
         });
     }
@@ -217,8 +209,7 @@ class studentController {
                 res.status(data.status).json(data.data);
             }
             catch (error) {
-                console.log(error);
-                next(new error_1.ErrorHandler());
+                next(new error_1.ErrorHandler(error));
             }
         });
     }
@@ -229,8 +220,7 @@ class studentController {
                 res.status(data.status).json(data.data);
             }
             catch (error) {
-                console.log(error);
-                next(new error_1.ErrorHandler());
+                next(new error_1.ErrorHandler(error));
             }
         });
     }
@@ -241,8 +231,7 @@ class studentController {
                 res.status(data.status).json(data.data);
             }
             catch (error) {
-                console.log(error);
-                next(new error_1.ErrorHandler());
+                next(new error_1.ErrorHandler(error));
             }
         });
     }
