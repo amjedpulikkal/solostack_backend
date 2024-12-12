@@ -1,4 +1,6 @@
 import { Router } from "express";
+import { adminController } from "./injections/injection";
 const router = Router()
 
-// router.route("chat-group").get(()=>).post(()=>)
+router.route("/login").post((req,res,next)=>adminController.signUpAdmin(req,res,next))
+export default router

@@ -30,7 +30,7 @@ export interface IHashpassword {
 export interface Itoken {
   verifyJwtToken(token: string): JwtPayload | boolean;
   singToken(
-    payload: Imentor | Istudent | { email: string; _id: string }
+    payload: Imentor | Istudent | { email: string; _id: string,admin?:boolean }
   ): string;
 }
 

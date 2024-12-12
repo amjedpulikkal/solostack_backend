@@ -1,13 +1,14 @@
 
-import { ErrorHandler } from "@infrastructure/server/middlewares/error";
+// import { ErrorHandler } from "@infrastructure/server/middlewares/error"; 
 import { req, res, next } from "../infrastructure/types/serverTypes"
+import { IadminUseCases } from "@interfaces/IadminUseCases";
 
 
 
-export class adminController {
-     private adminUseCases 
+export class AdminController {
+     private adminUseCases:IadminUseCases 
      constructor(
-        adminUseCases
+        adminUseCases:IadminUseCases
      ){
         this.adminUseCases = adminUseCases
      }
@@ -15,10 +16,10 @@ export class adminController {
    async signUpAdmin(req: req, res: res, next: next) {
 
         try {
-            const { email, password } = req.body
-            console.log(email, password);
+            const reqData:{email:string, password:string } = req.body
+   
 
-            const data = await this.adminUseCases.login(email, password)
+            const data = await this.adminUseCases.login(reqData)
      
             if (data.status === 200)
                 return res.cookie('jwtToken', data?.token, {
@@ -33,7 +34,7 @@ export class adminController {
 
         } catch (error) {
             console.log(error);
-            next(new ErrorHandler(error))
+            // next(new ErrorHandler(error))
 
         }
     }

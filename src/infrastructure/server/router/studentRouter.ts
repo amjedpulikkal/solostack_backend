@@ -40,7 +40,7 @@ router.get("/auth/google/callback",googleOauthCallback,(req,res,next)=>studentCt
 
 
 router.post("/signOut",(req,res,next)=>{studentCtrl.signOut(req,res,next)})
-router.post("/login",(req,res,next)=>{studentCtrl.login(req,res,next)})
+router.post("/login",WidgetValidation,(req,res,next)=>{studentCtrl.login(req,res,next)})
 
 
 router.get("/searchStudent",(req,res,next)=>{studentCtrl.searchStudent(req,res,next)})

@@ -13,6 +13,7 @@ import stripeRouter from "../router/stripeRouter"
 import session from 'express-session'
 import passport from 'passport'
 import { router } from 'bull-board'
+import adminRouter from "../router/adminRouter";
 
 const app: Express = express()
 app.use(session({
@@ -41,8 +42,10 @@ app.use(morgan('dev'))
 app.use('/api/v1/student', studentRouter)
 app.use('/api/v1/mentor', mentorRouter)
 app.use('/api/v1/group-chat',groupChatRouter)
+app.use('/api/v1/admin',adminRouter)
 app.use("/",stripeRouter)
 app.use('/admin/queues', router);
+
 
 
 export default app
