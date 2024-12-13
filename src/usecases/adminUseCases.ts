@@ -14,6 +14,7 @@ export class AdminUseCases implements IadminUseCases {
 
   async login({ email, password }: { email: string; password: string }):Promise<ResponseObj> {
     const data = await this.adminRepo.loginadmin(email, password);
+
     console.log("dataff=--",data);
     // if data than do
     if(!data)
@@ -22,6 +23,6 @@ export class AdminUseCases implements IadminUseCases {
     const token = this.token.singToken({email:data.email,_id:data._id,admin:true})
 
 
-    return {data:"",status:200,token}
+    return {data:email,status:200,token}
   }
 }
