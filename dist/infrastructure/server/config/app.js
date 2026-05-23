@@ -32,7 +32,10 @@ app.use((0, express_session_1.default)({
 app.use(passport_1.default.initialize());
 app.use(passport_1.default.session());
 app.use('/webhook', express_1.default.raw({ type: 'application/json' }));
-app.use((0, cors_1.default)({ origin: process.env.CLIENT_SERVER, credentials: true }));
+app.use((0, cors_1.default)({ 
+  origin: "https://solostack-rho.vercel.app", 
+  credentials: true 
+}));
 app.use((0, helmet_1.default)({
     crossOriginResourcePolicy: { policy: "cross-origin" },
     contentSecurityPolicy: false,
