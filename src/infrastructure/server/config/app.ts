@@ -31,10 +31,7 @@ app.use(passport.initialize());
 app.use(passport.session())
 app.use('/webhook', express.raw({type: 'application/json'}));
 app.use(cors({  
-  origin: (origin, callback) => {
-    // Allows any origin that makes a request
-    callback(null, true);
-  }, 
+  origin: 'https://solostack-rho.vercel.app', 
   credentials: true 
 }));
 
