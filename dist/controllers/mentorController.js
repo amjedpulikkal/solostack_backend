@@ -59,15 +59,15 @@ class MentorController {
                 console.log("dataRes", data);
                 if (data.status === 200)
                     return res
-                        .cookie("jwtToken", data === null || data === void 0 ? void 0 : data.token, {
-                        httpOnly: true,
-                        secure: true,
-                        sameSite: "strict",
-                        maxAge: 604800000,
-                        path: "/",
-                    })
-                        .status(data.status)
-                        .json(data.data);
+    .cookie("jwtToken", data === null || data === void 0 ? void 0 : data.token, {
+        httpOnly: true,
+        secure: true,
+        sameSite: "none", // <-- Changed from "strict" to "none"
+        maxAge: 604800000,
+        path: "/",
+    })
+    .status(data.status)
+    .json(data.data);
                 return res.status(data.status).json(data.data);
             }
             catch (error) {
