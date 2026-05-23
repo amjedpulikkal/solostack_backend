@@ -27,8 +27,8 @@ const transport = nodemailer_1.default.createTransport({
 class Nodemailer {
     sendOtpToMail(payload) {
         return __awaiter(this, void 0, void 0, function* () {
-            const send = yield transport.sendMail(payload);
-            console.log(send);
+            // const send = yield transport.sendMail(payload);
+            // console.log(send);
             return true;
         });
     }
