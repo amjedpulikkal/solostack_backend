@@ -34,6 +34,7 @@ app.use(cors({
   origin: 'https://solostack-rho.vercel.app', 
   credentials: true 
 }));
+console.log("--v1TS")
 
 app.use(helmet({
   crossOriginResourcePolicy: { policy: "cross-origin" },
