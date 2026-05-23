@@ -30,11 +30,18 @@ app.use(session({
 app.use(passport.initialize());
 app.use(passport.session())
 app.use('/webhook', express.raw({type: 'application/json'}));
-app.use(cors({  origin: process.env.CLIENT_SERVER, credentials: true }))
+app.use(cors({  
+  origin: (origin, callback) => {
+    // Allows any origin that makes a request
+    callback(null, true);
+  }, 
+  credentials: true 
+}));
+
 app.use(helmet({
-    crossOriginResourcePolicy: { policy: "cross-origin" },
-    contentSecurityPolicy: false,
-  }));
+  crossOriginResourcePolicy: { policy: "cross-origin" },
+  contentSecurityPolicy: false,
+}));
 app.use(cookieParser())
 app.use(express.json())
 app.use(express.urlencoded({ extended: true }))
