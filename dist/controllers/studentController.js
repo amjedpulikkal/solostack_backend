@@ -157,7 +157,7 @@ class studentController {
                 const { email, password } = req.body;
                 console.log(email, password);
                 const data = yield this.studentUsecase.login(email, password);
-                console.log("dataRes", data);
+                console.log("data----Res", data);
                 if (data.status === 200)
                     return res
                         .cookie("jwtToken", data === null || data === void 0 ? void 0 : data.token, {
