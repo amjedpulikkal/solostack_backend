@@ -29,6 +29,7 @@ app.use((0, express_session_1.default)({
         maxAge: 24 * 60 * 60 * 1000
     }
 }));
+console.log("--v1")
 app.use(passport_1.default.initialize());
 app.use(passport_1.default.session());
 app.use('/webhook', express_1.default.raw({ type: 'application/json' }));
